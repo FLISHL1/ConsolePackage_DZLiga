@@ -12,11 +12,11 @@ public class Truck {
         return cargoSpace;
     }
 
-    public int getHeight(){
+    public static int getHeight(){
         return HEIGHT;
     }
 
-    public int getWidth(){
+    public static int getWidth(){
         return WIDTH;
     }
     /**

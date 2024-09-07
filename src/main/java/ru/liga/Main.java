@@ -10,14 +10,24 @@ import java.util.Scanner;
 import java.util.stream.Collectors;
 
 public class Main {
-    public static void main(String[] args) throws FileNotFoundException, InvalidAttributesException {
+    public static void main(String[] args) throws FileNotFoundException{
         Scanner scanner = new Scanner(System.in);
         System.out.print("Введите название файла: ");
         String fileName = scanner.nextLine();
-        if (!fileName.matches("(?!.*\\/\\.txt$).+\\.txt"))
-            throw new InvalidAttributesException();
-
-        ArrayList<Box> boxList = readBoxesFromFile("src/main/resources/test3.txt");
+        try {
+            if (!fileName.matches("(?!.*/\\.txt$).+\\.txt"))
+                throw new InvalidAttributesException();
+        } catch (InvalidAttributesException e){
+            System.out.println("Названия файла не корректно!");
+            System.exit(1);
+        }
+        ArrayList<Box> boxList = null;
+        try {
+            boxList = readBoxesFromFile("src/main/resources/test3.txt");
+        } catch (InvalidAttributesException e){
+            System.out.println("Ошибочный размер коробки");
+            System.exit(1);
+        }
 
         boxList = sortBoxList(boxList);
 
@@ -62,7 +72,7 @@ public class Main {
             List<Box> unUsedBox = new ArrayList<>();
             while (!boxList.isEmpty()) {
                 Box box = boxList.remove(0);
-                if (fixY + box.getLength() > truck.getHeight()) {
+                if (fixY + box.getLength() > Truck.getHeight()) {
                     unUsedBox.add(box);
                     continue;
                 }
@@ -72,8 +82,8 @@ public class Main {
 
                 int fixX = box.getWidth();
                 while (!boxList.isEmpty()) {
-                    int remainingSpaceY = truck.getHeight() - box.getLength();
-                    int remainingSpaceX = truck.getWidth() - fixX;
+                    int remainingSpaceY = Truck.getHeight() - box.getLength();
+                    int remainingSpaceX = Truck.getWidth() - fixX;
                     List<Box> nextBoxList = boxList.stream().filter(boxF -> isNextBox(boxF, remainingSpaceY, remainingSpaceX)).toList();
                     if (nextBoxList.isEmpty()) break;
 
@@ -112,7 +122,7 @@ public class Main {
                 && box.getLength() <= remainingSpaceY;
     }
 
-    public static ArrayList<Box> readBoxesFromFile(String fileName) throws FileNotFoundException {
+    public static ArrayList<Box> readBoxesFromFile(String fileName) throws FileNotFoundException, InvalidAttributesException {
         FileReader reader = new FileReader(fileName);
         Scanner scanFile = new Scanner(reader);
         ArrayList<Box> boxList = new ArrayList<>();
@@ -128,6 +138,8 @@ public class Main {
                     .split("")
                     ).map(Integer::parseInt).collect(Collectors.toList());
             boxSpace.add(lineInt);
+            if (lineInt.size() > Truck.getWidth() || boxSpace.size() > Truck.getHeight())
+                throw new InvalidAttributesException();
         }
         addBox(boxSpace, boxList);
         return boxList;
