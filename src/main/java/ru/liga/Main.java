@@ -23,7 +23,7 @@ public class Main {
         }
         ArrayList<Box> boxList = null;
         try {
-            boxList = readBoxesFromFile("src/main/resources/test3.txt");
+            boxList = readBoxesFromFile(fileName);
         } catch (InvalidAttributesException e){
             System.out.println("Ошибочный размер коробки");
             System.exit(1);
@@ -82,7 +82,7 @@ public class Main {
 
                 int fixX = box.getWidth();
                 while (!boxList.isEmpty()) {
-                    int remainingSpaceY = Truck.getHeight() - box.getLength();
+                    int remainingSpaceY = Truck.getHeight() - fixYNext;
                     int remainingSpaceX = Truck.getWidth() - fixX;
                     List<Box> nextBoxList = boxList.stream().filter(boxF -> isNextBox(boxF, remainingSpaceY, remainingSpaceX)).toList();
                     if (nextBoxList.isEmpty()) break;
