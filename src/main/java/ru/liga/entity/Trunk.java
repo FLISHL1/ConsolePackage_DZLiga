@@ -1,15 +1,24 @@
 package ru.liga.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class TruckTrunk {
-    public final int HEIGHT = 6;
-    public final int WIDTH = 6;
-    private final List<Box> boxes = new ArrayList<>();
-    private final Integer[][] space = new Integer[HEIGHT][WIDTH];
+public class Trunk {
+    public final int HEIGHT;
+    public final int WIDTH;
+    private final List<Box> boxes;
+    private final int[][] space;
 
-    public Integer[][] getSpace() {
+    public Trunk() {
+        HEIGHT = 6;
+        WIDTH = 6;
+        boxes = new ArrayList<>();
+        space = new int[HEIGHT][WIDTH];
+    }
+
+    public int[][] getSpace() {
         return space;
     }
 
@@ -17,6 +26,7 @@ public class TruckTrunk {
         return boxes;
     }
 
+    @JsonIgnore
     public int getLatestVolume(){
         int volumeSpace = WIDTH*HEIGHT;
         int volumeBoxes = boxes.stream()
@@ -26,3 +36,4 @@ public class TruckTrunk {
 
     }
 }
+

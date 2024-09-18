@@ -1,13 +1,16 @@
 package ru.liga.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class Truck {
+    @JsonIgnore
     private final int BORDER_WIDTH = 1;
+    @JsonIgnore
     private final char BORDER_CHAR = '+';
-    private final TruckTrunk trunk = new TruckTrunk();
+    private final Trunk trunk = new Trunk();
 
-    public TruckTrunk getTrunk() {
+    public Trunk getTrunk() {
         return trunk;
     }
 
@@ -17,7 +20,7 @@ public class Truck {
         for (int line = trunk.getSpace().length-1; line >= 0; line--) {
             stringBuilder.append(BORDER_CHAR);
             for (Integer column: trunk.getSpace()[line]){
-                if (column == null)
+                if (column == 0)
                     stringBuilder.append(" ");
                 else
                     stringBuilder.append(column);

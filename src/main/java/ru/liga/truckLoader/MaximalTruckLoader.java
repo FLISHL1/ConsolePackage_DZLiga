@@ -7,6 +7,7 @@ import ru.liga.entity.Truck;
 import ru.liga.exception.LoadingCapacityExceededException;
 import ru.liga.service.BoxService;
 import ru.liga.service.TruckService;
+import ru.liga.service.TrunkService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +18,7 @@ public class MaximalTruckLoader extends TruckLoader {
     private final int START_X = 0;
     private final int FIRST_BOX_INDEX = 0;
     private final TruckService truckService = new TruckService();
+    private final TrunkService trunkService = new TrunkService();
     private final BoxService boxService = new BoxService();
 
     @Override
@@ -25,7 +27,7 @@ public class MaximalTruckLoader extends TruckLoader {
         List<Box> unusedBox = new ArrayList<>();
         log.debug("Starting to load trucks with {} boxes.", boxes.size());
         while (!boxes.isEmpty()) {
-            if (truckList.size() > countTrucks) {
+            if (truckList.size() == countTrucks) {
                 throw new LoadingCapacityExceededException();
             }
             boxes = boxService.sortBoxes(boxes);
@@ -54,7 +56,7 @@ public class MaximalTruckLoader extends TruckLoader {
                 continue;
             }
 
-            truckService.addBoxInTrunk(truck, box, START_X, fixedCurrentY);
+            trunkService.addBoxInTrunk(truck, box, START_X, fixedCurrentY);
             log.debug("Box: {} added to truck. Current truck state: {}", box, truck);
 
             int currentY = fixedCurrentY;
@@ -68,7 +70,7 @@ public class MaximalTruckLoader extends TruckLoader {
                 log.debug("Remaining space in truck is up to height {} - Width: {}, Height: {}", fixedCurrentY, remainingSpaceX, remainingSpaceY);
 
                 List<Box> nextBoxList = boxes.stream()
-                        .filter(boxF -> truckService.isNextBox(boxF, remainingSpaceY, remainingSpaceX))
+                        .filter(boxF -> trunkService.isNextBox(boxF, remainingSpaceY, remainingSpaceX))
                         .toList();
                 if (nextBoxList.isEmpty()) {
                     log.debug("No more boxes fit in the remaining space. Moving to next truck.");
@@ -76,7 +78,7 @@ public class MaximalTruckLoader extends TruckLoader {
                 }
 
                 Box nextBox = nextBoxList.get(FIRST_BOX_INDEX);
-                truckService.addBoxInTrunk(truck, nextBox, currentX, currentY);
+                trunkService.addBoxInTrunk(truck, nextBox, currentX, currentY);
                 boxes.remove(nextBox);
                 log.debug("Next box: {} added to truck. Current truck state: {}", nextBox, truck);
 

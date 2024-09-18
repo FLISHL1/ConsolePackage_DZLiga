@@ -7,12 +7,16 @@ import ru.liga.entity.Truck;
 import ru.liga.exception.LoadingCapacityExceededException;
 import ru.liga.service.BoxService;
 import ru.liga.service.TruckService;
+import ru.liga.service.TrunkService;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class UniformTruckLoader extends TruckLoader {
     private static final Logger log = LoggerFactory.getLogger(UniformTruckLoader.class);
+    private final TruckService truckService = new TruckService();
+    private final TrunkService trunkService = new TrunkService();
+    private final BoxService boxService = new BoxService();
 
     @Override
     public List<Truck> load(List<Box> boxes, Integer countTrucks) {
@@ -23,8 +27,7 @@ public class UniformTruckLoader extends TruckLoader {
             log.info("Truck #{} created.", i + 1);
         }
 
-        TruckService truckService = new TruckService();
-        BoxService boxService = new BoxService();
+
         boxes = boxService.sortBoxes(boxes);
         log.info("Boxes sorted by size.");
 
@@ -35,7 +38,7 @@ public class UniformTruckLoader extends TruckLoader {
             log.info("Trucks sorted by free volume.");
 
             for (Truck truck : trucks) {
-                if (truckService.addBoxInTrunkWithFindPlace(truck, box)) {
+                if (trunkService.addBoxInTrunkWithFindPlace(truck, box)) {
                     log.info("Box successfully loaded into truck #{}", trucks.indexOf(truck) + 1);
                     isPlace = true;
                     break;
@@ -49,6 +52,10 @@ public class UniformTruckLoader extends TruckLoader {
         }
 
         log.info("Loading process completed. Number of trucks used: {}", trucks.size());
+        log.debug("Truck: \n");
+        for (Truck truck: trucks){
+            log.debug(truck.toString()+"\n");
+        }
         return trucks;
     }
 

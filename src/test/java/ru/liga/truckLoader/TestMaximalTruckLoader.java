@@ -1,3 +1,5 @@
+package ru.liga.truckLoader;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.liga.entity.Box;

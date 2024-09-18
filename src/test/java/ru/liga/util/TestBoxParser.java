@@ -1,7 +1,8 @@
+package ru.liga.util;
+
 import org.junit.jupiter.api.Test;
 import ru.liga.entity.Box;
 import ru.liga.util.BoxParser;
-
 import java.util.Arrays;
 import java.util.List;
 
