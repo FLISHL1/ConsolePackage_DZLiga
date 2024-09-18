@@ -1,0 +1,25 @@
+package ru.liga.util;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.File;
+import java.nio.file.Files;
+import java.util.Collections;
+import java.util.List;
+
+public class TxtReader {
+    private static final Logger log = LoggerFactory.getLogger(TxtReader.class);
+
+    public List<String> read(String fileName) {
+        try {
+            log.info("Start file read: {}", fileName);
+            List<String> allLines = Files.readAllLines(new File(getClass().getClassLoader().getResource(fileName).toURI()).toPath());
+            log.info("End file read: {}", fileName);
+            return allLines;
+        } catch (Exception e) {
+            log.error("Error with read file: {}, exception: {}", fileName, e.getMessage());
+            return Collections.emptyList();
+        }
+    }
+}
