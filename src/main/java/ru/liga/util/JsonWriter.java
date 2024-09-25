@@ -13,6 +13,12 @@ public class JsonWriter {
     private static final Logger log = LoggerFactory.getLogger(JsonWriter.class);
     private final String JSON_TRUCKS_FILE_NAME = "json/trucks.json";
 
+    /**
+     *
+     * Записывает в файл {@code JSON_TRUCKS_FILE_NAME} грузовики в json представлении
+     *
+     * @param trucks Список грузовиков
+     */
     public void writeToFileTruckList(List<Truck> trucks) {
         ObjectMapper objectMapper = new JsonConfigurationMapper().getObjectMapper();
         try {

@@ -9,9 +9,9 @@ import java.util.List;
 
 public class TrunkService {
     /**
-     * +y     +
-     * +|     +
-     * +      +
+     * + y    +
+     * + |    +
+     * +\/    +
      * +      +
      * +      +
      * +x->   +
@@ -36,6 +36,14 @@ public class TrunkService {
         truck.getTrunk().getBoxes().add(box);
     }
 
+    /**
+     * Ищет свобоное пространсто в грузовике <p>
+     * Если находит то вставляет туда коробку
+     *
+     * @param truck Грузовик куда мы помещаем коробку
+     * @param box Коробка
+     * @return Удалось ли поместить коробку
+     */
     public boolean addBoxInTrunkWithFindPlace(Truck truck, Box box){
         Trunk trunk = truck.getTrunk();
         for (int y = 0; y < trunk.HEIGHT; y++){
@@ -53,7 +61,7 @@ public class TrunkService {
         return false;
     }
 
-    public boolean isSpaceAvailable(Truck truck, Box box, int x, int y) {
+    private boolean isSpaceAvailable(Truck truck, Box box, int x, int y) {
         for (int i = 0; i < box.getHeight(); i++) {
             for (int j = 0; j < box.getWidth(); j++) {
                 if (truck.getTrunk().getSpace()[y + i][x + j] != 0) {

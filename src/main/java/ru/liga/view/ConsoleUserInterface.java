@@ -19,6 +19,9 @@ import java.util.*;
 public class ConsoleUserInterface {
     private final UserInputHandler userInputHandler = new UserInputHandler();
 
+    /**
+     * Главный экран
+     */
     public void start() {
         String typeFunc = userInputHandler.prompt("""
                 Выберете функцию:

@@ -11,6 +11,11 @@ import java.util.List;
 public class TxtReader {
     private static final Logger log = LoggerFactory.getLogger(TxtReader.class);
 
+    /**
+     *
+     * @param fileName Путь до файла txt в папке resources
+     * @return Список сторк читаемого файла
+     */
     public List<String> read(String fileName) {
         try {
             log.info("Start file read: {}", fileName);

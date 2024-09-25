@@ -15,6 +15,11 @@ public class JsonReader {
 
     private static final Logger log = LoggerFactory.getLogger(JsonReader.class);
 
+    /**
+     *
+     * @param fileName Путь до файла Json в папке проекта resources
+     * @return Список грузовиков
+     */
     public List<Truck> readTruckList(String fileName){
         ObjectMapper objectMapper = new JsonConfigurationMapper().getObjectMapper();
         try {

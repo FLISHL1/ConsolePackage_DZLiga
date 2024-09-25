@@ -11,6 +11,11 @@ import java.util.List;
 public class TxtParser {
     private static final Logger log = LoggerFactory.getLogger(TxtParser.class);
 
+    /**
+     *
+     * @param fileName Путь до файла txt в папке resources
+     * @return Список корбок
+     */
     public List<Box> parseBoxFromFile(String fileName){
         try {
             List<String> readingLines = new TxtReader().read(fileName);

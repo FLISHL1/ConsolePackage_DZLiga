@@ -12,15 +12,22 @@ import ru.liga.service.TrunkService;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MaximalTruckLoader extends TruckLoader {
+public class MaximalTruckLoader implements TruckLoader {
     private static final Logger log = LoggerFactory.getLogger(MaximalTruckLoader.class);
     private final int START_Y = 0;
     private final int START_X = 0;
     private final int FIRST_BOX_INDEX = 0;
-    private final TruckService truckService = new TruckService();
     private final TrunkService trunkService = new TrunkService();
     private final BoxService boxService = new BoxService();
 
+    /**
+     * Грузит в грузовики коробки заполняя практически все свобоное место
+     *
+     * @param boxes Список коробок для погрузки
+     * @param countTrucks Максимально количество грузовиков для погрузки
+     * @return Список погруженных грузовиков
+     * @throws LoadingCapacityExceededException Для погрузки всех посылок не хватает заданого количества грузовиков
+     */
     @Override
     public List<Truck> load(List<Box> boxes, Integer countTrucks) {
         List<Truck> truckList = new ArrayList<>();
@@ -93,6 +100,4 @@ public class MaximalTruckLoader extends TruckLoader {
         log.debug("Finished loading truck. Final truck state: {}", truck);
         return truck;
     }
-
-
 }

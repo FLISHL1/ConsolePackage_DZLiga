@@ -12,12 +12,21 @@ import ru.liga.service.TrunkService;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UniformTruckLoader extends TruckLoader {
+public class UniformTruckLoader implements TruckLoader {
     private static final Logger log = LoggerFactory.getLogger(UniformTruckLoader.class);
     private final TruckService truckService = new TruckService();
     private final TrunkService trunkService = new TrunkService();
     private final BoxService boxService = new BoxService();
 
+    /**
+     * Равномерно распределяет коробки по грузовикам <p>
+     * Распределяет коробки по объему
+     *
+     * @param boxes Список коробок для погрузки
+     * @param countTrucks Количество грузовиков по которым нужно распределить коробки
+     * @return Список погруженных грузовиков
+     * @throws LoadingCapacityExceededException Указывает на то что коробка не момещается ни в один из грузовиков
+     */
     @Override
     public List<Truck> load(List<Box> boxes, Integer countTrucks) {
         List<Truck> trucks = new ArrayList<>();

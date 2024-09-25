@@ -26,8 +26,13 @@ public class Trunk {
         return boxes;
     }
 
-    @JsonIgnore
-    public int getLatestVolume(){
+
+    /**
+     * Просчитывает оставшийся свобоный объем в багажнике
+     *
+     * @return Оставшееся свободный обьем
+     */
+    public int calculateLatestVolume(){
         int volumeSpace = WIDTH*HEIGHT;
         int volumeBoxes = boxes.stream()
                 .mapToInt(Box::getVolume)

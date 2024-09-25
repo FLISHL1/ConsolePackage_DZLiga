@@ -6,13 +6,24 @@ import java.util.List;
 import java.util.Map;
 
 public class TruckService {
-
+    /**
+     * Сортирует по возрастанию свобоного места список грузовиков
+     *
+     * @param trucks Список грузовиков
+     * @return Отсортированный по возрастанию свободного места список грузовиков
+     */
     public List<Truck> sortTrucksByFreeVolume(List<Truck> trucks) {
         return trucks.stream()
-                .sorted((truck2, truck1) -> Integer.compare(truck1.getTrunk().getLatestVolume(), truck2.getTrunk().getLatestVolume()))
+                .sorted((truck2, truck1) -> Integer.compare(truck1.getTrunk().calculateLatestVolume(), truck2.getTrunk().calculateLatestVolume()))
                 .toList();
     }
 
+    /**
+     * Считает во всех грузовиках количество коробок по типам формы
+     *
+     * @param trucks Список грузовиков
+     * @return Словарь с количеством каждого типа коробок
+     */
     public Map<Box, Integer> countBoxInTrucks(List<Truck> trucks) {
         Map<Box, Integer> countTypeBox = new HashMap<>();
         for (Truck truck : trucks) {

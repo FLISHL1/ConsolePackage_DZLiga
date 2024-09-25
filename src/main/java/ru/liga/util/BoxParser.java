@@ -13,6 +13,12 @@ public class BoxParser {
 
     private static final Logger log = LoggerFactory.getLogger(BoxParser.class);
 
+    /**
+     * Парсит коробки из списка строк
+     *
+     * @param boxesData Список строчек в которых информация о коробках
+     * @return Список коробок
+     */
     public List<Box> parse(List<String> boxesData) {
         log.info("Start parse boxes data");
         List<Box> boxes = new ArrayList<>();
