@@ -669,3 +669,9 @@
 2024-09-18 23:50:05 INFO  JsonWriter:19 - Start write file: json/trucks.json
 2024-09-18 23:50:05 INFO  JsonWriter:24 - File with exist in path: json/trucks.json
 2024-09-18 23:50:05 INFO  JsonWriter:27 - End write file: json/trucks.json
+2024-09-25 18:11:01 INFO  JsonReader:26 - Start file read: truckTest.json
+2024-09-25 18:11:01 INFO  JsonReader:29 - End file read: truckTest.json
+2024-09-25 18:12:12 INFO  JsonReader:26 - Start file read: truckTest.json
+2024-09-25 18:12:12 INFO  JsonReader:29 - End file read: truckTest.json
+2024-09-25 18:14:27 INFO  JsonReader:26 - Start file read: truckTest.json
+2024-09-25 18:14:27 INFO  JsonReader:29 - End file read: truckTest.json

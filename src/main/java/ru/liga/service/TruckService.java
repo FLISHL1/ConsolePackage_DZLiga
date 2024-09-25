@@ -1,6 +1,8 @@
 package ru.liga.service;
+
 import ru.liga.entity.Box;
 import ru.liga.entity.Truck;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,18 +20,25 @@ public class TruckService {
                 .toList();
     }
 
+
+    private Map<Box, Integer> countBoxInTruck(Truck truck) {
+        Map<Box, Integer> countTypeBox = new HashMap<>();
+        for (Box box : truck.getTrunk().getBoxes()) {
+            countTypeBox.put(box, countTypeBox.getOrDefault(box, 0) + 1);
+        }
+        return countTypeBox;
+    }
+
     /**
      * Считает во всех грузовиках количество коробок по типам формы
      *
      * @param trucks Список грузовиков
      * @return Словарь с количеством каждого типа коробок
      */
-    public Map<Box, Integer> countBoxInTrucks(List<Truck> trucks) {
-        Map<Box, Integer> countTypeBox = new HashMap<>();
+    public Map<Truck, Map<Box, Integer>> countBoxInTrucks(List<Truck> trucks) {
+        Map<Truck, Map<Box, Integer>> countTypeBox = new HashMap<>();
         for (Truck truck : trucks) {
-            for (Box box : truck.getTrunk().getBoxes()){
-                countTypeBox.put(box, countTypeBox.getOrDefault(box, 0)+1);
-            }
+            countTypeBox.put(truck, countBoxInTruck(truck));
         }
         return countTypeBox;
     }

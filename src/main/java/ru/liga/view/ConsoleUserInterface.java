@@ -14,10 +14,13 @@ import ru.liga.util.JsonWriter;
 import ru.liga.util.TxtParser;
 import ru.liga.validator.FileNameValidator;
 import ru.liga.validator.ValidationResult;
-import java.util.*;
+
+import java.util.List;
+import java.util.Map;
 
 public class ConsoleUserInterface {
     private final UserInputHandler userInputHandler = new UserInputHandler();
+    private final FileNameValidator fileNameValidator = new FileNameValidator();
 
     /**
      * Главный экран
@@ -39,28 +42,33 @@ public class ConsoleUserInterface {
 
     private void checkCountBoxInTruck() {
         String fileName = userInputHandler.prompt("Введите название файла (.json): ");
-        ValidationResult fileNameValidation = new FileNameValidator().validateJson(fileName);
-        if (fileNameValidation.isInvalid()){
-            message("Название файла не корректно");
-            throw new UserInputException(fileNameValidation.getErrorMessage());
-        }
+        ValidationResult fileNameValidation = fileNameValidator.validateJson(fileName);
+        checkFileName(fileNameValidation);
         JsonReader jsonReader = new JsonReader();
         List<Truck> trucks = jsonReader.readTruckList(fileName);
         TruckService truckService = new TruckService();
-        Map<Box, Integer> countBoxInTrucks = truckService.countBoxInTrucks(trucks);
+        Map<Truck, Map<Box, Integer>> countBoxInTrucks = truckService.countBoxInTrucks(trucks);
         message("Ниже будет указанно сколько и каких посылок было в грузовиках");
-        for (Box box: countBoxInTrucks.keySet()){
-            message(box.toString() + " - количество = " + countBoxInTrucks.get(box));
+        for (Truck truck: countBoxInTrucks.keySet()){
+            message("---------------------------");
+            for (Box box : countBoxInTrucks.get(truck).keySet()) {
+                message(box.toString() + " - количество = " + countBoxInTrucks.get(truck).get(box));
+            }
+            message("Вид загруженного грузовика: \n" + truck);
+        }
+    }
+
+    private void checkFileName(ValidationResult fileNameValidation) {
+        if (fileNameValidation.isInvalid()) {
+            message("Название файла не корректно");
+            throw new UserInputException(fileNameValidation.getErrorMessage());
         }
     }
 
     private void workWithBoxesInTxtFile() {
         String fileName = userInputHandler.prompt("Введите название файла (.txt): ");
-        ValidationResult fileNameValidation = new FileNameValidator().validateTxt(fileName);
-        if (fileNameValidation.isInvalid()) {
-            message("Название файла не корректно");
-            throw new UserInputException(fileNameValidation.getErrorMessage());
-        }
+        ValidationResult fileNameValidation = fileNameValidator.validateTxt(fileName);
+        checkFileName(fileNameValidation);
         String countTrucks = userInputHandler.prompt("Введите количество погружаемых машин: ");
 
         String loaderType = selectLoaderType();
