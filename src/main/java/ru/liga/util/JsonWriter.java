@@ -3,14 +3,19 @@ package ru.liga.util;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import ru.liga.entity.Truck;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+@Component
 public class JsonWriter {
     private static final Logger log = LoggerFactory.getLogger(JsonWriter.class);
+
+    @Value(value = "${util.json.truck.write.file}")
     private final String JSON_TRUCKS_FILE_NAME = "json/trucks.json";
 
     /**

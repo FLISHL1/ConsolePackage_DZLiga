@@ -3,7 +3,7 @@ package ru.liga.util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.liga.entity.Box;
-import ru.liga.exception.BoxSizeException;
+import ru.liga.exceptions.BoxSizeException;
 
 import java.util.Collections;
 import java.util.List;

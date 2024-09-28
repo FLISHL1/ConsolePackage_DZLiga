@@ -3,8 +3,7 @@ package ru.liga.truckLoader;
 import org.junit.jupiter.api.Test;
 import ru.liga.entity.Box;
 import ru.liga.entity.Truck;
-import ru.liga.exception.LoadingCapacityExceededException;
-import ru.liga.truckLoader.UniformTruckLoader;
+import ru.liga.exceptions.LoadingCapacityExceededException;
 
 import java.util.ArrayList;
 import java.util.Arrays;

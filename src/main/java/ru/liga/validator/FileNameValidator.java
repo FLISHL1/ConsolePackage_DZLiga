@@ -1,5 +1,8 @@
 package ru.liga.validator;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class FileNameValidator{
     private final String REGEX_FILENAME_TXT = "(?!.*/\\.txt$).+\\.txt";
     private final String REGEX_FILENAME_JSON = "(?!.*/\\.json$).+\\.json";

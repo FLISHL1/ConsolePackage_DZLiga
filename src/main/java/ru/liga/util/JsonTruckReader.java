@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 import ru.liga.entity.Truck;
 
 import java.io.File;
@@ -11,9 +12,10 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.List;
 
-public class JsonReader {
+@Component
+public class JsonTruckReader {
 
-    private static final Logger log = LoggerFactory.getLogger(JsonReader.class);
+    private static final Logger log = LoggerFactory.getLogger(JsonTruckReader.class);
 
     /**
      *

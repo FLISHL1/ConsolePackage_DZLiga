@@ -1,10 +1,12 @@
 package ru.liga.service;
 
+import org.springframework.stereotype.Service;
 import ru.liga.entity.Box;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Service
 public class BoxService {
     /**
      * Сортирует список коробок по убыванию объема

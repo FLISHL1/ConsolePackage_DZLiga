@@ -4,7 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.liga.entity.Box;
 import ru.liga.entity.Truck;
-import ru.liga.exception.LoadingCapacityExceededException;
+import ru.liga.exceptions.LoadingCapacityExceededException;
 import ru.liga.service.BoxService;
 import ru.liga.service.TruckService;
 import ru.liga.service.TrunkService;

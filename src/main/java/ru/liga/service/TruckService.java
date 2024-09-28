@@ -1,12 +1,18 @@
 package ru.liga.service;
 
+import org.springframework.stereotype.Service;
 import ru.liga.entity.Box;
 import ru.liga.entity.Truck;
+import ru.liga.truckLoader.MaximalTruckLoader;
+import ru.liga.truckLoader.TruckLoader;
+import ru.liga.util.TxtParser;
+import ru.liga.validator.ValidationResult;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Service
 public class TruckService {
     /**
      * Сортирует по возрастанию свобоного места список грузовиков
@@ -41,5 +47,11 @@ public class TruckService {
             countTypeBox.put(truck, countBoxInTruck(truck));
         }
         return countTypeBox;
+    }
+
+    public List<Truck> fillTruckWithBoxes(String filePath, Integer maxCountTruck, TruckLoader truckLoader) {
+        TxtParser fileParser = new TxtParser();
+        List<Box> boxes = fileParser.parseBoxFromFile(filePath);
+        return truckLoader.load(boxes, maxCountTruck);
     }
 }

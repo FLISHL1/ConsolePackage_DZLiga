@@ -1,4 +1,4 @@
-package ru.liga.exception;
+package ru.liga.exceptions;
 
 public class BoxSizeException extends RuntimeException {
     public BoxSizeException() {
