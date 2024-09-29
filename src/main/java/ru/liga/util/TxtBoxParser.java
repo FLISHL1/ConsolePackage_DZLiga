@@ -8,8 +8,8 @@ import ru.liga.exceptions.BoxSizeException;
 import java.util.Collections;
 import java.util.List;
 
-public class TxtParser {
-    private static final Logger log = LoggerFactory.getLogger(TxtParser.class);
+public class TxtBoxParser {
+    private static final Logger log = LoggerFactory.getLogger(TxtBoxParser.class);
 
     /**
      *

@@ -13,14 +13,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestMaximalTruckLoader {
-
-
     private MaximalTruckLoader loader;
-
-    @BeforeEach
-    public void setUp() {
-        loader = new MaximalTruckLoader();
-    }
 
     @Test
     public void testLoad_singleTruckAllBoxesFit() {

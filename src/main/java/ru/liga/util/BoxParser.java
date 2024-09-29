@@ -13,6 +13,11 @@ public class BoxParser {
 
     private static final Logger log = LoggerFactory.getLogger(BoxParser.class);
 
+    private static List<String> convertLineToList(String line) {
+        return Arrays.stream(line.strip().split(""))
+                .collect(Collectors.toList());
+    }
+
     /**
      * Парсит коробки из списка строк
      *
@@ -22,33 +27,28 @@ public class BoxParser {
     public List<Box> parse(List<String> boxesData) {
         log.info("Start parse boxes data");
         List<Box> boxes = new ArrayList<>();
-        List<List<Integer>> boxSpace = new ArrayList<>();
+        List<List<String>> boxSpace = new ArrayList<>();
+        int nameIndex = 0;
         for (String line : boxesData) {
             if (line.isBlank()) {
-                addBoxInBoxList(boxSpace, boxes);
+                addBoxInBoxList(boxSpace, boxes, nameIndex++);
                 boxSpace = new ArrayList<>();
                 continue;
             }
             log.debug("Parse row: {}", line);
-            List<Integer> lineInt = convertLineToIntegerList(line);
+            List<String> lineInt = convertLineToList(line);
             boxSpace.add(lineInt);
         }
-        addBoxInBoxList(boxSpace, boxes);
+        addBoxInBoxList(boxSpace, boxes, nameIndex++);
         log.info("End parse boxes data");
         return boxes;
     }
 
-    private static List<Integer> convertLineToIntegerList(String line) {
-        return Arrays.stream(line.strip().split(""))
-                .map(Integer::parseInt)
-                .collect(Collectors.toList());
-    }
-
-    private void addBoxInBoxList(List<List<Integer>> boxSpace, List<Box> boxList) {
+    private void addBoxInBoxList(List<List<String>> boxSpace, List<Box> boxList, Integer nameIndex) {
         if (!boxSpace.isEmpty()) {
-            Box newBox = new Box(boxSpace);
+            Box newBox = new Box("Box" + nameIndex, boxSpace);
             boxList.add(newBox);
-            log.debug("Box added: {}", newBox);
+            log.debug("Box added: \n{}", newBox);
         }
     }
 }

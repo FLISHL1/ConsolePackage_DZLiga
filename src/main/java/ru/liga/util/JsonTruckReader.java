@@ -14,16 +14,19 @@ import java.util.List;
 
 @Component
 public class JsonTruckReader {
-
     private static final Logger log = LoggerFactory.getLogger(JsonTruckReader.class);
+    private final ObjectMapper objectMapper;
+
+    public JsonTruckReader(ObjectMapper objectMapper) {
+        this.objectMapper = objectMapper;
+    }
 
     /**
      *
      * @param fileName Путь до файла Json в папке проекта resources
      * @return Список грузовиков
      */
-    public List<Truck> readTruckList(String fileName){
-        ObjectMapper objectMapper = new JsonConfigurationMapper().getObjectMapper();
+    public List<Truck> read(String fileName){
         try {
             log.info("Start file read: {}", fileName);
             List<Truck> trucks = objectMapper.readValue(new File(getClass().getClassLoader().getResource(fileName).toURI()),

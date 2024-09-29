@@ -2,6 +2,7 @@ package ru.liga.truckLoader;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 import ru.liga.entity.Box;
 import ru.liga.entity.Truck;
 import ru.liga.exceptions.LoadingCapacityExceededException;
@@ -11,13 +12,17 @@ import ru.liga.service.TrunkService;
 import java.util.ArrayList;
 import java.util.List;
 
+@Component
 public class MaximalTruckLoader implements TruckLoader {
     private static final Logger log = LoggerFactory.getLogger(MaximalTruckLoader.class);
-    private final int START_Y = 0;
-    private final int START_X = 0;
-    private final int FIRST_BOX_INDEX = 0;
-    private final TrunkService trunkService = new TrunkService();
-    private final BoxService boxService = new BoxService();
+    private final TrunkService trunkService;
+    private final BoxService boxService;
+
+    public MaximalTruckLoader(TrunkService trunkService, BoxService boxService) {
+        this.trunkService = trunkService;
+        this.boxService = boxService;
+    }
+
 
     /**
      * Грузит в грузовики коробки заполняя практически все свобоное место
@@ -49,21 +54,24 @@ public class MaximalTruckLoader implements TruckLoader {
 
     private Truck loadOneTruck(List<Box> boxes, List<Box> unusedBox) {
         Truck truck = new Truck();
+        final int START_Y = 0;
+        final int START_X = 0;
+        final int FIRST_BOX_INDEX = 0;
         int fixedCurrentY = START_Y;
 
         log.debug("Loading a new truck.");
 
         while (!boxes.isEmpty()) {
             Box box = boxes.remove(FIRST_BOX_INDEX);
-            log.debug("Trying to add box: {} to truck.", box);
+            log.debug("Trying to add box: \n{}\n to truck.", box);
             if (fixedCurrentY + box.getHeight() > truck.getTrunk().HEIGHT || box.getWidth() > truck.getTrunk().WIDTH) {
-                log.debug("Box: {} is too large for the truck. Adding to unused boxes.", box);
+                log.debug("Box: \n{}\n is too large for the truck. Adding to unused boxes.", box);
                 unusedBox.add(box);
                 continue;
             }
 
             trunkService.addBoxInTrunk(truck, box, START_X, fixedCurrentY);
-            log.debug("Box: {} added to truck. Current truck state: {}", box, truck);
+            log.debug("Box: \n{}\n added to truck. Current truck state: \n{}", box, truck);
 
             int currentY = fixedCurrentY;
             fixedCurrentY += box.getHeight();
@@ -86,7 +94,7 @@ public class MaximalTruckLoader implements TruckLoader {
                 Box nextBox = nextBoxList.get(FIRST_BOX_INDEX);
                 trunkService.addBoxInTrunk(truck, nextBox, currentX, currentY);
                 boxes.remove(nextBox);
-                log.debug("Next box: {} added to truck. Current truck state: {}", nextBox, truck);
+                log.debug("Next box: \n{}\n added to truck. Current truck state: \n{}", nextBox, truck);
 
                 if (remainingSpaceX > nextBox.getWidth()) {
                     currentX += nextBox.getWidth();
@@ -96,7 +104,7 @@ public class MaximalTruckLoader implements TruckLoader {
             }
         }
 
-        log.debug("Finished loading truck. Final truck state: {}", truck);
+        log.debug("Finished loading truck. Final truck state: \n{}", truck);
         return truck;
     }
 }

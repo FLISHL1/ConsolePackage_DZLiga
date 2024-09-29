@@ -28,10 +28,10 @@ public class TrunkService {
         if (!isSpaceAvailable(truck, box, x, y)){
             throw new BoxDoesNotFitException();
         }
-        List<List<Integer>> boxSpace = box.getSpace();
-        for (List<Integer> line : boxSpace) {
+        List<List<String>> boxSpace = box.getSpace();
+        for (List<String> line : boxSpace) {
             int lineX = x;
-            for (Integer column : line) {
+            for (String column : line) {
                 truck.getTrunk().getSpace()[y][lineX++] = column;
             }
             y++;
@@ -67,7 +67,7 @@ public class TrunkService {
     private boolean isSpaceAvailable(Truck truck, Box box, int x, int y) {
         for (int i = 0; i < box.getHeight(); i++) {
             for (int j = 0; j < box.getWidth(); j++) {
-                if (truck.getTrunk().getSpace()[y + i][x + j] != 0) {
+                if (truck.getTrunk().getSpace()[y + i][x + j] != null) {
                     return false;
                 }
             }

@@ -2,6 +2,7 @@ package ru.liga.truckLoader;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 import ru.liga.entity.Box;
 import ru.liga.entity.Truck;
 import ru.liga.exceptions.LoadingCapacityExceededException;
@@ -12,11 +13,18 @@ import ru.liga.service.TrunkService;
 import java.util.ArrayList;
 import java.util.List;
 
+@Component
 public class UniformTruckLoader implements TruckLoader {
     private static final Logger log = LoggerFactory.getLogger(UniformTruckLoader.class);
-    private final TruckService truckService = new TruckService();
-    private final TrunkService trunkService = new TrunkService();
-    private final BoxService boxService = new BoxService();
+    private final TruckService truckService;
+    private final TrunkService trunkService;
+    private final BoxService boxService;
+
+    public UniformTruckLoader(TruckService truckService, TrunkService trunkService, BoxService boxService) {
+        this.truckService = truckService;
+        this.trunkService = trunkService;
+        this.boxService = boxService;
+    }
 
     /**
      * Равномерно распределяет коробки по грузовикам <p>

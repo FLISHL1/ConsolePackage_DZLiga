@@ -19,8 +19,8 @@ public class Truck {
         StringBuilder stringBuilder = new StringBuilder();
         for (int line = trunk.getSpace().length-1; line >= 0; line--) {
             stringBuilder.append(BORDER_CHAR);
-            for (Integer column: trunk.getSpace()[line]){
-                if (column == 0)
+            for (String column: trunk.getSpace()[line]){
+                if (column == null)
                     stringBuilder.append(" ");
                 else
                     stringBuilder.append(column);

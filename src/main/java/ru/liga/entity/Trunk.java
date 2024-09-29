@@ -9,16 +9,16 @@ public class Trunk {
     public final int HEIGHT;
     public final int WIDTH;
     private final List<Box> boxes;
-    private final int[][] space;
+    private final String[][] space;
 
     public Trunk() {
         HEIGHT = 6;
         WIDTH = 6;
         boxes = new ArrayList<>();
-        space = new int[HEIGHT][WIDTH];
+        space = new String[HEIGHT][WIDTH];
     }
 
-    public int[][] getSpace() {
+    public String[][] getSpace() {
         return space;
     }
 

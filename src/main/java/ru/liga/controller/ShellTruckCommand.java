@@ -7,41 +7,37 @@ import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
 import ru.liga.entity.Box;
 import ru.liga.entity.Truck;
-import ru.liga.exceptions.UserInputException;
 import ru.liga.service.JsonTruckService;
 import ru.liga.service.TruckService;
-import ru.liga.truckLoader.MaximalTruckLoader;
-import ru.liga.truckLoader.TruckLoader;
-import ru.liga.truckLoader.UniformTruckLoader;
 import ru.liga.validator.FileNameValidator;
-import ru.liga.validator.ValidationResult;
 
 import java.util.List;
 import java.util.Map;
 
 @ShellComponent
-@ShellCommandGroup("TruckCommand")
+@ShellCommandGroup("Truck-command")
 public class ShellTruckCommand {
     private final Terminal terminal;
     private final FileNameValidator fileNameValidator;
     private final TruckService truckService;
     private final JsonTruckService jsonTruckService;
+    private final ShellFileValidator shellFileValidator;
 
-    public ShellTruckCommand(Terminal terminal, FileNameValidator fileNameValidator, TruckService truckService, JsonTruckService jsonTruckService) {
+    public ShellTruckCommand(Terminal terminal, FileNameValidator fileNameValidator, TruckService truckService, JsonTruckService jsonTruckService, ShellFileValidator shellFileValidator) {
         this.terminal = terminal;
         this.fileNameValidator = fileNameValidator;
         this.truckService = truckService;
         this.jsonTruckService = jsonTruckService;
+        this.shellFileValidator = shellFileValidator;
     }
 
 
     @ShellMethod(value = "Загрузка коробок в грузовик из файла равномерно", key = "count-box-in-trucks")
     private void checkCountBoxInTrucks(
-            @ShellOption(help = "Путь до файла с посылками в формате .json для погрузка из папки resources", value = {"filePath", "-f"}, optOut = true)
+            @ShellOption(help = "Путь до файла с посылками в формате .json для погрузка из папки resources", value = {"filePath", "-f"})
             String filePath
     ) {
-        ValidationResult fileNameValidation = fileNameValidator.validateJson(filePath);
-        checkFileName(fileNameValidation);
+        shellFileValidator.checkFileName(fileNameValidator.validateJson(filePath));
         Map<Truck, Map<Box, Integer>> countBoxInTrucks = calcCountBoxInTruckFromJson(filePath);
         terminal.writer().println("Ниже будет указанно сколько и каких посылок было в грузовиках");
         for (Truck truck : countBoxInTrucks.keySet()) {
@@ -58,10 +54,5 @@ public class ShellTruckCommand {
         return truckService.countBoxInTrucks(trucks);
     }
 
-    private void checkFileName(ValidationResult fileNameValidation) {
-        if (fileNameValidation.isInvalid()) {
-            terminal.writer().println("Название файла не корректно");
-            throw new UserInputException(fileNameValidation.getErrorMessage());
-        }
-    }
+
 }

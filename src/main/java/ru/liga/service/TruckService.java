@@ -3,10 +3,8 @@ package ru.liga.service;
 import org.springframework.stereotype.Service;
 import ru.liga.entity.Box;
 import ru.liga.entity.Truck;
-import ru.liga.truckLoader.MaximalTruckLoader;
 import ru.liga.truckLoader.TruckLoader;
-import ru.liga.util.TxtParser;
-import ru.liga.validator.ValidationResult;
+import ru.liga.util.TxtBoxParser;
 
 import java.util.HashMap;
 import java.util.List;
@@ -14,6 +12,12 @@ import java.util.Map;
 
 @Service
 public class TruckService {
+    private final JsonTruckService jsonTruckService;
+
+    public TruckService(JsonTruckService jsonTruckService) {
+        this.jsonTruckService = jsonTruckService;
+    }
+
     /**
      * Сортирует по возрастанию свобоного места список грузовиков
      *
@@ -50,8 +54,10 @@ public class TruckService {
     }
 
     public List<Truck> fillTruckWithBoxes(String filePath, Integer maxCountTruck, TruckLoader truckLoader) {
-        TxtParser fileParser = new TxtParser();
+        TxtBoxParser fileParser = new TxtBoxParser();
         List<Box> boxes = fileParser.parseBoxFromFile(filePath);
-        return truckLoader.load(boxes, maxCountTruck);
+        List<Truck> trucksLoaded = truckLoader.load(boxes, maxCountTruck);
+        jsonTruckService.writeFile(trucksLoaded);
+        return trucksLoaded;
     }
 }
