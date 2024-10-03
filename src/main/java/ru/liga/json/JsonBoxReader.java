@@ -1,37 +1,33 @@
-package ru.liga.util;
+package ru.liga.json;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import ru.liga.entity.Box;
+import ru.liga.util.Reader;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.List;
 
 @Component
-public class JsonBoxReader {
+public class JsonBoxReader implements Reader<List<Box>> {
     private static final Logger log = LoggerFactory.getLogger(JsonBoxReader.class);
     private final ObjectMapper objectMapper;
 
-    private final String filePath;
 
 
-    public JsonBoxReader(ObjectMapper objectMapper,
-                         @Value("${util.json.box.file}") String filePath) {
+    public JsonBoxReader(ObjectMapper objectMapper) {
         this.objectMapper = objectMapper;
-        this.filePath = filePath;
     }
 
     /**
      *
      * @return Список коробок
      */
-    public List<Box> read(){
+    public List<Box> read(String filePath){
         try {
             log.info("Start file read: {}", filePath);
             List<Box> boxes = objectMapper.readValue(new File(filePath),

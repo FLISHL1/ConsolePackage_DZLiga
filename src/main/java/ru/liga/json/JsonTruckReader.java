@@ -1,4 +1,4 @@
-package ru.liga.util;
+package ru.liga.json;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import ru.liga.entity.Truck;
+import ru.liga.util.Reader;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,7 +14,7 @@ import java.net.URISyntaxException;
 import java.util.List;
 
 @Component
-public class JsonTruckReader {
+public class JsonTruckReader implements Reader<List<Truck>> {
     private static final Logger log = LoggerFactory.getLogger(JsonTruckReader.class);
     private final ObjectMapper objectMapper;
 

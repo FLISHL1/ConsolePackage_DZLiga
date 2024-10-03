@@ -1,9 +1,10 @@
 package ru.liga.truckLoader;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
 import ru.liga.entity.Box;
 import ru.liga.entity.Truck;
-import ru.liga.exceptions.LoadingCapacityExceededException;
+import ru.liga.exception.LoadingCapacityExceededException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -12,6 +13,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+@SpringBootTest
 public class TestUniformTruckLoader {
     UniformTruckLoader uniformTruckLoader;
 
@@ -62,11 +64,11 @@ public class TestUniformTruckLoader {
 
 
     private Box createBox(int size) {
-        List<List<Integer>> space = new ArrayList<>();
+        List<List<String>> space = new ArrayList<>();
         for (int i = 0; i < size; i++) {
-            List<Integer> line = new ArrayList<>();
+            List<String> line = new ArrayList<>();
             for (int j = 0; j < size; j++) {
-                line.add(i + 1); // Заполняем значением
+                line.add(String.valueOf(i + 1)); // Заполняем значением
             }
             space.add(line);
         }
@@ -74,11 +76,11 @@ public class TestUniformTruckLoader {
     }
 
     private Box createBox(int length, int width) {
-        List<List<Integer>> space = new ArrayList<>();
+        List<List<String>> space = new ArrayList<>();
         for (int i = 0; i < length; i++) {
-            List<Integer> line = new ArrayList<>();
+            List<String> line = new ArrayList<>();
             for (int j = 0; j < width; j++) {
-                line.add(1); // Заполняем единицами
+                line.add("1"); // Заполняем единицами
             }
             space.add(line);
         }

@@ -2,7 +2,7 @@ package ru.liga.controller;
 
 import org.jline.terminal.Terminal;
 import org.springframework.shell.standard.ShellComponent;
-import ru.liga.exceptions.UserInputException;
+import ru.liga.exception.UserInputException;
 import ru.liga.validator.ValidationResult;
 
 @ShellComponent

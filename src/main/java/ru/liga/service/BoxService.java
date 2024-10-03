@@ -2,11 +2,11 @@ package ru.liga.service;
 
 import org.springframework.stereotype.Service;
 import ru.liga.entity.Box;
-import ru.liga.exceptions.BoxNotFoundException;
-import ru.liga.exceptions.IdentityNameBoxException;
-import ru.liga.repositories.BoxRepository;
+import ru.liga.exception.BoxNotFoundException;
+import ru.liga.exception.IdentityNameBoxException;
+import ru.liga.repository.BoxRepository;
 
-import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -44,6 +44,15 @@ public class BoxService {
     public Optional<Box> getByName(String name) {
         return Optional.ofNullable(boxRepository.findByName(name));
     }
+
+    public List<Optional<Box>> getByNames(String[] names) {
+        List<Optional<Box>> boxes = new ArrayList<>();
+        for (String name : names) {
+            boxes.add(getByName(name));
+        }
+        return boxes;
+    }
+
 
     public void save(Box box) {
         if (getByName(box.getName()).isPresent()) {

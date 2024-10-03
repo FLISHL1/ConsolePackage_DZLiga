@@ -5,12 +5,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import ru.liga.entity.Box;
 import ru.liga.entity.Truck;
-import ru.liga.exceptions.LoadingCapacityExceededException;
+import ru.liga.exception.LoadingCapacityExceededException;
 import ru.liga.service.BoxService;
 import ru.liga.service.TruckService;
 import ru.liga.service.TrunkService;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -36,18 +35,15 @@ public class UniformTruckLoader implements TruckLoader {
      * @throws LoadingCapacityExceededException Указывает на то что коробка не момещается ни в один из грузовиков
      */
     @Override
-    public List<Truck> load(List<Box> boxes, Integer countTrucks) {
-        List<Truck> trucks = new ArrayList<>();
-        log.info("Starting the loading process. Number of boxes: {}, Number of trucks: {}", boxes.size(), countTrucks);
-        for (int i = 0; i < countTrucks; i++) {
-            trucks.add(new Truck());
-            log.info("Truck #{} created.", i + 1);
-        }
+    public List<Truck> load(List<Box> boxes, Integer countTrucks, int width, int height) {
+        return load(boxes, truckService.createListTrucks(countTrucks, width, height));
+    }
 
-
+    @Override
+    public List<Truck> load(List<Box> boxes, List<Truck> trucks) {
+        log.info("Starting the loading process. Number of boxes: {}, Number of trucks: {}", boxes.size(), trucks);
         boxes = boxService.sortBoxes(boxes);
         log.info("Boxes sorted by size.");
-
         for (Box box : boxes) {
             log.info("Attempting to load box with dimensions (Width: {}, Height: {})", box.getWidth(), box.getHeight());
             boolean isPlace = false;
@@ -61,7 +57,6 @@ public class UniformTruckLoader implements TruckLoader {
                     break;
                 }
             }
-
             if (!isPlace) {
                 log.error("Failed to load box with dimensions (Width: {}, Height: {}).", box.getWidth(), box.getHeight());
                 throw new LoadingCapacityExceededException();
@@ -75,5 +70,6 @@ public class UniformTruckLoader implements TruckLoader {
         }
         return trucks;
     }
+
 
 }

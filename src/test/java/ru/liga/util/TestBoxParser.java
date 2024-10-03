@@ -19,7 +19,7 @@ public class TestBoxParser {
         List<String> boxesData = Arrays.asList(
                 "8888",
                 "8888",
-                ""
+                "8888"
         );
 
         // Ожидаемое состояние коробки

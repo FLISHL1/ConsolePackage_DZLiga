@@ -4,7 +4,7 @@ import org.springframework.stereotype.Service;
 import ru.liga.entity.Box;
 import ru.liga.entity.Truck;
 import ru.liga.entity.Trunk;
-import ru.liga.exceptions.BoxDoesNotFitException;
+import ru.liga.exception.BoxDoesNotFitException;
 
 import java.util.List;
 

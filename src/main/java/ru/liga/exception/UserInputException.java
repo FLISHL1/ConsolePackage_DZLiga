@@ -1,4 +1,4 @@
-package ru.liga.exceptions;
+package ru.liga.exception;
 
 public class UserInputException extends RuntimeException {
     public UserInputException() {

@@ -1,6 +1,8 @@
 package ru.liga.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,11 +13,21 @@ public class Trunk {
     private final List<Box> boxes;
     private final String[][] space;
 
-    public Trunk() {
-        HEIGHT = 6;
-        WIDTH = 6;
-        boxes = new ArrayList<>();
-        space = new String[HEIGHT][WIDTH];
+
+    public Trunk(int WIDTH, int HEIGHT) {
+        this(HEIGHT, WIDTH, new ArrayList<>(), new String[HEIGHT][WIDTH]);
+    }
+    @JsonCreator
+    public Trunk(@JsonProperty("HEIGHT") int HEIGHT,
+                 @JsonProperty("WIDTH") int WIDTH,
+                 @JsonProperty("boxes")
+                 List<Box> boxes,
+                 @JsonProperty("space")
+                 String[][] space) {
+        this.HEIGHT = HEIGHT;
+        this.WIDTH = WIDTH;
+        this.boxes = boxes;
+        this.space = space;
     }
 
     public String[][] getSpace() {

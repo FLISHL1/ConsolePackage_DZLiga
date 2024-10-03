@@ -1,21 +1,31 @@
 package ru.liga.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import ru.liga.entity.Box;
 import ru.liga.entity.Truck;
+import ru.liga.entity.Trunk;
+import ru.liga.exception.BoxNotFoundException;
 import ru.liga.truckLoader.TruckLoader;
-import ru.liga.util.TxtBoxParser;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class TruckService {
+    private static final Logger log = LoggerFactory.getLogger(TruckService.class);
     private final JsonTruckService jsonTruckService;
+    private final BoxService boxService;
+    private final TxtBoxService txtBoxService;
 
-    public TruckService(JsonTruckService jsonTruckService) {
+    public TruckService(JsonTruckService jsonTruckService, BoxService boxService, TxtBoxService txtBoxService) {
         this.jsonTruckService = jsonTruckService;
+        this.boxService = boxService;
+        this.txtBoxService = txtBoxService;
     }
 
     /**
@@ -53,11 +63,29 @@ public class TruckService {
         return countTypeBox;
     }
 
-    public List<Truck> fillTruckWithBoxes(String filePath, Integer maxCountTruck, TruckLoader truckLoader) {
-        TxtBoxParser fileParser = new TxtBoxParser();
-        List<Box> boxes = fileParser.parseBoxFromFile(filePath);
-        List<Truck> trucksLoaded = truckLoader.load(boxes, maxCountTruck);
-        jsonTruckService.writeFile(trucksLoaded);
+    public List<Truck> fillTrucksWithBoxesByName(String filePath, Integer maxCountTruck, int width, int height, TruckLoader truckLoader) {
+        List<Box> boxes = txtBoxService.getAll(filePath);
+        List<Truck> trucksLoaded = truckLoader.load(boxes, maxCountTruck, width, height);
+        jsonTruckService.save(trucksLoaded);
         return trucksLoaded;
+    }
+
+    public List<Truck> fillTrucksWithBoxesByName(String[] boxesData, Integer maxCountTruck, int width, int height, TruckLoader truckLoader) {
+        List<Box> boxes = boxService.getByNames(boxesData).stream()
+                .map(obj -> obj.orElseThrow(BoxNotFoundException::new))
+                .collect(Collectors.toList());
+
+        List<Truck> trucksLoaded = truckLoader.load(boxes, maxCountTruck, width, height);
+        jsonTruckService.save(trucksLoaded);
+        return trucksLoaded;
+    }
+
+    public List<Truck> createListTrucks(Integer countTrucks, int width, int height) {
+        List<Truck> trucks = new ArrayList<>();
+        for (int i = 0; i < countTrucks; i++) {
+            trucks.add(new Truck(new Trunk(width, height)));
+            log.info("Truck #{} created.", i + 1);
+        }
+        return trucks;
     }
 }

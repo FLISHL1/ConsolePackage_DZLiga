@@ -6,7 +6,7 @@ import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
 import ru.liga.entity.Box;
-import ru.liga.exceptions.BoxNotFoundException;
+import ru.liga.exception.BoxNotFoundException;
 import ru.liga.service.BoxService;
 
 import java.util.List;
@@ -14,16 +14,16 @@ import java.util.Optional;
 
 @ShellComponent
 @ShellCommandGroup("Box-service")
-public class ShellBoxCommand {
+public class ShellBoxController {
     private final BoxService boxService;
     private final Terminal terminal;
 
-    public ShellBoxCommand(BoxService boxService, Terminal terminal) {
+    public ShellBoxController(BoxService boxService, Terminal terminal) {
         this.boxService = boxService;
         this.terminal = terminal;
     }
 
-    @ShellMethod(value = "Выводит все сохраненные типы коробок", key = {"boxes"})
+    @ShellMethod(value = "Выводит все сохраненные типы коробок", key = {"box-all"})
     private void boxes() {
         List<Box> boxes = boxService.getAll();
         for (Box box : boxes) {
@@ -31,7 +31,15 @@ public class ShellBoxCommand {
         }
     }
 
-    @ShellMethod(value = "Сохраняет тип коробки", key = {"add-box"})
+    @ShellMethod(value = "Выводит тип коробки", key = {"box"})
+    private void boxByName(
+            @ShellOption(help = "Имя типа коробки", value = {"name", "-n"})
+            String name
+    ) {
+        southBox(boxService.getByName(name).orElseThrow(BoxNotFoundException::new));
+    }
+
+    @ShellMethod(value = "Сохраняет тип коробки", key = {"box-add"})
     private void add(
             @ShellOption(help = "Имя типа коробки", value = {"name", "-n"})
             String name,
@@ -48,7 +56,7 @@ public class ShellBoxCommand {
         southBox(box);
     }
 
-    @ShellMethod(value = "Обновляет тип коробки", key = {"update-box"})
+    @ShellMethod(value = "Обновляет тип коробки", key = {"box-update"})
     private void update(
             @ShellOption(help = "Имя типа коробки", value = {"name", "-n"})
             String name,
@@ -82,7 +90,7 @@ public class ShellBoxCommand {
         southBox(box);
     }
 
-    @ShellMethod(value = "Удаляет тип коробки", key = {"remove-box"})
+    @ShellMethod(value = "Удаляет тип коробки", key = {"box-remove"})
     private void remove(
             @ShellOption(help = "Имя типа коробки", value = {"name", "-n"})
             String name

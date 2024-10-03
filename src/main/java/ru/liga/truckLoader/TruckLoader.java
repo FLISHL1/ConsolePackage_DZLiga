@@ -6,5 +6,7 @@ import ru.liga.entity.Truck;
 import java.util.List;
 
 public interface TruckLoader {
-    public abstract List<Truck> load(List<Box> boxes, Integer countTrucks);
+    List<Truck> load(List<Box> boxes, Integer countTrucks, int width, int height);
+
+    List<Truck> load(List<Box> boxes, List<Truck> trucks);
 }

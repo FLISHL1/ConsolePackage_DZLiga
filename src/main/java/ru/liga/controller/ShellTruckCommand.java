@@ -32,7 +32,7 @@ public class ShellTruckCommand {
     }
 
 
-    @ShellMethod(value = "Загрузка коробок в грузовик из файла равномерно", key = "count-box-in-trucks")
+    @ShellMethod(value = "Подсчет коробок в грузовиках", key = "count-box-in-trucks")
     private void checkCountBoxInTrucks(
             @ShellOption(help = "Путь до файла с посылками в формате .json для погрузка из папки resources", value = {"filePath", "-f"})
             String filePath
@@ -50,7 +50,7 @@ public class ShellTruckCommand {
     }
 
     private Map<Truck, Map<Box, Integer>> calcCountBoxInTruckFromJson(String filePath) {
-        List<Truck> trucks = jsonTruckService.readJson(filePath);
+        List<Truck> trucks = jsonTruckService.getAll(filePath);
         return truckService.countBoxInTrucks(trucks);
     }
 

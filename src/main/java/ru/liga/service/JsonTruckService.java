@@ -2,26 +2,31 @@ package ru.liga.service;
 
 import org.springframework.stereotype.Service;
 import ru.liga.entity.Truck;
-import ru.liga.util.JsonTruckReader;
-import ru.liga.util.JsonTruckWriter;
+import ru.liga.repository.TruckRepository;
 
 import java.util.List;
 
 @Service
 public class JsonTruckService {
-    private final JsonTruckWriter jsonWriter;
-    private final JsonTruckReader jsonReader;
+    private final TruckRepository truckRepository;
 
-    public JsonTruckService(JsonTruckWriter jsonWriter, JsonTruckReader jsonReader) {
-        this.jsonWriter = jsonWriter;
-        this.jsonReader = jsonReader;
+    public JsonTruckService(TruckRepository truckRepository) {
+        this.truckRepository = truckRepository;
     }
 
-    public void writeFile(List<Truck> truckList){
-        jsonWriter.write(truckList);
+    public void save(List<Truck> truckList) {
+        truckRepository.write(truckList);
     }
 
-    public List<Truck> readJson(String filePath){
-        return jsonReader.read(filePath);
+    public void save(String filePath, List<Truck> truckList) {
+        truckRepository.write(filePath, truckList);
+    }
+
+    public List<Truck> getAll(String filePath) {
+        return truckRepository.read(filePath);
+    }
+
+    public List<Truck> getAll() {
+        return truckRepository.read();
     }
 }

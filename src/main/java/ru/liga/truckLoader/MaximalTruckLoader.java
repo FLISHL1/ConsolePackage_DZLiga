@@ -5,8 +5,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import ru.liga.entity.Box;
 import ru.liga.entity.Truck;
-import ru.liga.exceptions.LoadingCapacityExceededException;
+import ru.liga.exception.LoadingCapacityExceededException;
 import ru.liga.service.BoxService;
+import ru.liga.service.TruckService;
 import ru.liga.service.TrunkService;
 
 import java.util.ArrayList;
@@ -17,10 +18,12 @@ public class MaximalTruckLoader implements TruckLoader {
     private static final Logger log = LoggerFactory.getLogger(MaximalTruckLoader.class);
     private final TrunkService trunkService;
     private final BoxService boxService;
+    private final TruckService truckService;
 
-    public MaximalTruckLoader(TrunkService trunkService, BoxService boxService) {
+    public MaximalTruckLoader(TrunkService trunkService, BoxService boxService, TruckService truckService) {
         this.trunkService = trunkService;
         this.boxService = boxService;
+        this.truckService = truckService;
     }
 
 
@@ -33,27 +36,32 @@ public class MaximalTruckLoader implements TruckLoader {
      * @throws LoadingCapacityExceededException Для погрузки всех посылок не хватает заданого количества грузовиков
      */
     @Override
-    public List<Truck> load(List<Box> boxes, Integer countTrucks) {
-        List<Truck> truckList = new ArrayList<>();
+    public List<Truck> load(List<Box> boxes, Integer countTrucks, int width, int height) {
+        return load(boxes, truckService.createListTrucks(countTrucks, width, height));
+    }
+
+    @Override
+    public List<Truck> load(List<Box> boxes, List<Truck> trucks) {
+        final int FIRST_INDEX = 0;
+        List<Truck> filledTrukList = new ArrayList<>();
         List<Box> unusedBox = new ArrayList<>();
         log.debug("Starting to load trucks with {} boxes.", boxes.size());
         while (!boxes.isEmpty()) {
-            if (truckList.size() == countTrucks) {
+            if (trucks.isEmpty()) {
                 throw new LoadingCapacityExceededException();
             }
             boxes = boxService.sortBoxes(boxes);
-            Truck newTruck = loadOneTruck(boxes, unusedBox);
-            truckList.add(newTruck);
-            log.debug("Truck loaded with boxes: \n{}", newTruck);
+            Truck filledTruck = loadOneTruck(boxes, unusedBox, trucks.remove(FIRST_INDEX));
+            filledTrukList.add(filledTruck);
+            log.debug("Truck loaded with boxes: \n{}", filledTruck);
             boxes.addAll(unusedBox);
             unusedBox = new ArrayList<>();
         }
-        log.debug("Finished loading trucks. Total trucks loaded: {}", truckList.size());
-        return truckList;
+        log.debug("Finished loading trucks. Total trucks loaded: {}", filledTrukList.size());
+        return filledTrukList;
     }
 
-    private Truck loadOneTruck(List<Box> boxes, List<Box> unusedBox) {
-        Truck truck = new Truck();
+    private Truck loadOneTruck(List<Box> boxes, List<Box> unusedBox, Truck truck) {
         final int START_Y = 0;
         final int START_X = 0;
         final int FIRST_BOX_INDEX = 0;
