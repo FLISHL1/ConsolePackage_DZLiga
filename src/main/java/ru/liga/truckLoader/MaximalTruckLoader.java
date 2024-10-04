@@ -64,7 +64,7 @@ public class MaximalTruckLoader implements TruckLoader {
         while (!boxes.isEmpty()) {
             Box box = boxes.remove(FIRST_BOX_INDEX);
             log.debug("Trying to add box: \n{}\n to truck.", box);
-            if (fixedCurrentY + box.getHeight() > truck.getTrunk().HEIGHT || box.getWidth() > truck.getTrunk().WIDTH) {
+            if (fixedCurrentY + box.getHeight() > truck.getTrunk().getHeight() || box.getWidth() > truck.getTrunk().getWidth()) {
                 log.debug("Box: \n{}\n is too large for the truck. Adding to unused boxes.", box);
                 unusedBox.add(box);
                 continue;
@@ -78,8 +78,8 @@ public class MaximalTruckLoader implements TruckLoader {
 
             int currentX = box.getWidth();
             while (currentY < fixedCurrentY) {
-                int remainingSpaceY = truck.getTrunk().HEIGHT - currentY;
-                int remainingSpaceX = truck.getTrunk().WIDTH - currentX;
+                int remainingSpaceY = truck.getTrunk().getHeight() - currentY;
+                int remainingSpaceX = truck.getTrunk().getWidth() - currentX;
 
                 log.debug("Remaining space in truck is up to height {} - Width: {}, Height: {}", fixedCurrentY, remainingSpaceX, remainingSpaceY);
 

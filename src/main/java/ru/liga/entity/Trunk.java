@@ -8,24 +8,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Trunk {
-    public final int HEIGHT;
-    public final int WIDTH;
+    private final int height;
+    private final int width;
     private final List<Box> boxes;
     private final String[][] space;
 
 
-    public Trunk(int WIDTH, int HEIGHT) {
-        this(HEIGHT, WIDTH, new ArrayList<>(), new String[HEIGHT][WIDTH]);
+    public Trunk(int width, int height) {
+        this(height, width, new ArrayList<>(), new String[height][width]);
     }
     @JsonCreator
-    public Trunk(@JsonProperty("HEIGHT") int HEIGHT,
-                 @JsonProperty("WIDTH") int WIDTH,
+    public Trunk(@JsonProperty("HEIGHT") int height,
+                 @JsonProperty("WIDTH") int width,
                  @JsonProperty("boxes")
                  List<Box> boxes,
                  @JsonProperty("space")
                  String[][] space) {
-        this.HEIGHT = HEIGHT;
-        this.WIDTH = WIDTH;
+        this.height = height;
+        this.width = width;
         this.boxes = boxes;
         this.space = space;
     }
@@ -39,6 +39,12 @@ public class Trunk {
     }
 
 
+    public int getHeight() {
+        return height;
+    }
 
+    public int getWidth() {
+        return width;
+    }
 }
 

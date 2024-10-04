@@ -50,8 +50,8 @@ public class TrunkService {
      */
     public boolean addBoxInTrunkWithFindPlace(Truck truck, Box box){
         Trunk trunk = truck.getTrunk();
-        for (int y = 0; y < trunk.HEIGHT; y++){
-            for (int x = 0; x < trunk.WIDTH; x++){
+        for (int y = 0; y < trunk.getHeight(); y++){
+            for (int x = 0; x < trunk.getWidth(); x++){
                 if (isBoxWithInBounds(truck, box, x, y)){
                     if (isSpaceAvailable(truck, box, x, y)){
                         addBoxInTrunk(truck, box, x, y);
@@ -77,7 +77,7 @@ public class TrunkService {
     }
 
     private boolean isBoxWithInBounds(Truck truck, Box box, int x, int y) {
-        return x + box.getWidth() <= truck.getTrunk().WIDTH && y + box.getHeight() <= truck.getTrunk().HEIGHT;
+        return x + box.getWidth() <= truck.getTrunk().getWidth() && y + box.getHeight() <= truck.getTrunk().getHeight();
     }
 
     /**
@@ -101,7 +101,7 @@ public class TrunkService {
      * @return Процент занятого объема
      */
     public int calculatePercentOccupiedVolume(Trunk trunk) {
-        int volumeSpace = trunk.WIDTH * trunk.HEIGHT;
+        int volumeSpace = trunk.getWidth() * trunk.getHeight();
         int volumeBoxes = trunk.getBoxes().stream()
                 .mapToInt(Box::getVolume)
                 .sum();

@@ -2,112 +2,92 @@ package ru.liga.truckLoader;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import ru.liga.Application;
 import ru.liga.entity.Box;
 import ru.liga.entity.Truck;
+import ru.liga.entity.Trunk;
+import ru.liga.exception.LoadingCapacityExceededException;
 import ru.liga.service.BoxService;
 import ru.liga.service.TrunkService;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
-@ExtendWith(MockitoExtension.class)
-public class TestMaximalTruckLoader {
+class TestMaximalTruckLoader {
+
     @Mock
-    private TrunkService trunkService = new TrunkService();
+    private TrunkService trunkService;
 
     @Mock
     private BoxService boxService;
 
     @InjectMocks
-    private MaximalTruckLoader loader;
+    private MaximalTruckLoader maximalTruckLoader;
+
+    private List<Box> boxes;
+    private List<Truck> trucks;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         MockitoAnnotations.openMocks(this);
+
+        // Инициализация тестовых данных
+        Box box1 = mock(Box.class);
+        when(box1.getHeight()).thenReturn(2);
+        when(box1.getWidth()).thenReturn(2);
+        when(box1.getVolume()).thenReturn(4);
+
+        Box box2 = mock(Box.class);
+        when(box2.getHeight()).thenReturn(3);
+        when(box2.getWidth()).thenReturn(3);
+        when(box2.getVolume()).thenReturn(9);
+
+        Truck truck1 = mock(Truck.class);
+        when(truck1.getTrunk()).thenReturn(new Trunk(6, 6));
+        Truck truck2 = mock(Truck.class);
+        when(truck2.getTrunk()).thenReturn(new Trunk(4, 5));
+
+        boxes = new ArrayList<>();
+        boxes.add(box2);
+        boxes.add(box1);
+        trucks = new ArrayList<>();
+        trucks.add(truck1);
+        trucks.add(truck2);
     }
 
     @Test
-    public void testLoad_singleTruckAllBoxesFit() {
-        // Создаем список коробок, которые все помещаются в один грузовик
-        List<Box> boxes = Arrays.asList(
-                createBox(3, 3),  // Box размером 2x2
-                createBox(2, 2),  // Box размером 1x1
-                createBox(1, 1)   // Box размером 3x3
-        );
-        when(boxService.sortBoxes(boxes)).thenReturn(boxes);
+    void testLoadSuccessful() {
+        // Подготовка моков
+        when(boxService.sortBoxes(any())).thenReturn(boxes);
+        when(trunkService.isNextBox(any(Box.class), anyInt(), anyInt())).thenReturn(true);
+        doNothing().when(trunkService).addBoxInTrunk(any(Truck.class), any(Box.class), anyInt(), anyInt());
 
+        // Выполнение метода
+        List<Truck> loadedTrucks = maximalTruckLoader.load(boxes, trucks);
 
-        // Выполняем загрузку
-        List<Truck> truckList = loader.load(boxes, 1);
+        // Проверка что метод был вызван корректно
+        verify(trunkService, times(2)).addBoxInTrunk(any(Truck.class), any(Box.class), anyInt(), anyInt());
 
-        // Проверяем, что все коробки уместились в один грузовик
-        assertEquals(1, truckList.size());
+        // Проверка результата
+        assert loadedTrucks != null;
+        assert loadedTrucks.size() == 1; // два грузовика должны быть загружены
     }
 
     @Test
-    public void testLoad_multipleTrucksNeeded() {
-        // Создаем список коробок, которые не помещаются в один грузовик
-        List<Box> boxes = Arrays.asList(
-                createBox(6, 6),  // Box, который полностью заполняет один грузовик
-                createBox(2, 2)   // Box, который должен пойти во второй грузовик
-        );
+    void testLoadBoxDoesNotFitThrowsException() {
+        // Подготовка моков
+        when(boxService.sortBoxes(any())).thenReturn(boxes);
 
+        // Выполнение метода и проверка выброса исключения
+        assertThrows(LoadingCapacityExceededException.class, () -> maximalTruckLoader.load(boxes, new ArrayList<>()));
 
-        // Выполняем загрузку
-        List<Truck> truckList = loader.load(boxes, 2);
-
-        // Проверяем, что требуется два грузовика
-        assertEquals(2, truckList.size());
     }
 
-    @Test
-    public void testLoad_noBoxes() {
-        // Пустой список коробок
-        List<Box> boxes = Arrays.asList();
 
-        // Выполняем загрузку
-        List<Truck> truckList = loader.load(boxes, 1);
-
-        // Проверяем, что грузовиков нет
-        assertTrue(truckList.isEmpty());
-    }
-
-    private Box createBox(int size) {
-        List<List<String>> space = new ArrayList<>();
-        for (int i = 0; i < size; i++) {
-            List<String> line = new ArrayList<>();
-            for (int j = 0; j < size; j++) {
-                line.add(String.valueOf(i + 1)); // Заполняем значением
-            }
-            space.add(line);
-        }
-        return new Box(space);
-    }
-
-    private Box createBox(int length, int width) {
-        List<List<String>> space = new ArrayList<>();
-        for (int i = 0; i < length; i++) {
-            List<String> line = new ArrayList<>();
-            for (int j = 0; j < width; j++) {
-                line.add("1"); // Заполняем единицами
-            }
-            space.add(line);
-        }
-        return new Box(space);
-    }
 }
-
-

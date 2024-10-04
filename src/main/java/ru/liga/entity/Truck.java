@@ -36,7 +36,7 @@ public class Truck {
         }
         stringBuilder.append(Character
                 .toString(BORDER_CHAR)
-                .repeat(trunk.WIDTH + BORDER_WIDTH + BORDER_WIDTH)
+                .repeat(trunk.getWidth() + BORDER_WIDTH + BORDER_WIDTH)
         );
         return stringBuilder.toString();
     }
