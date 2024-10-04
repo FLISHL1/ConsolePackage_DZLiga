@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import ru.liga.entity.Truck;
+import ru.liga.exception.ReadJsonException;
 import ru.liga.util.Reader;
 
 import java.io.File;
@@ -26,6 +27,7 @@ public class JsonTruckReader implements Reader<List<Truck>> {
      *
      * @param fileName Путь до файла Json в папке проекта resources
      * @return Список грузовиков
+     * @throws ReadJsonException Ошибка чтения json
      */
     public List<Truck> read(String fileName){
         try {
@@ -36,7 +38,7 @@ public class JsonTruckReader implements Reader<List<Truck>> {
             return trucks;
         } catch (URISyntaxException | IOException e) {
             log.error("Error with read file: {}, exception: {}", fileName, e.getMessage());
-            throw new RuntimeException(e);
+            throw new ReadJsonException(e.getMessage());
         }
     }
 }

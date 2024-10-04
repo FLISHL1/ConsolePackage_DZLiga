@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import ru.liga.entity.Truck;
+import ru.liga.exception.WriteJsonException;
 import ru.liga.util.Writer;
 
 import java.io.File;
@@ -20,11 +21,12 @@ public class JsonTruckWriter implements Writer<List<Truck>> {
         this.objectMapper = objectMapper;
     }
 
+
     /**
-     *
-     * Записывает в файл {@code filePath} грузовики в json представлении
-     *
+     * Записывает в файл json грузовики
+     * @param filePath Путь до файла json
      * @param trucks Список грузовиков
+     * @throws WriteJsonException Ошибка в записи json
      */
     public void write(String filePath, List<Truck> trucks) {
         try {
@@ -39,7 +41,7 @@ public class JsonTruckWriter implements Writer<List<Truck>> {
             log.info("End write file: {}", filePath);
         } catch (IOException e) {
             log.error("Error with write file: {}, exception: {}", filePath, e.getMessage());
-            throw new RuntimeException(e);
+            throw new WriteJsonException(e.getMessage());
         }
     }
 }

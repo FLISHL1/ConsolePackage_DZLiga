@@ -20,6 +20,7 @@ public class TrunkService {
      * +x->   +
      * ++++++++
      *
+     * @param truck Грузовик в кторый мы грузим посылку
      * @param box Ящик который мы хотим погрузить
      * @param x   Точка с которой начнется запись коробки в горизонтали
      * @param y   Точка с которой начнется запись коробки в вертикали
@@ -93,4 +94,21 @@ public class TrunkService {
                 && box.getHeight() <= remainingSpaceY;
     }
 
+    /**
+     * Просчитывает процент занятного объема в багажнике
+     *
+     * @param trunk Грузовик в котором считаем
+     * @return Процент занятого объема
+     */
+    public int calculatePercentOccupiedVolume(Trunk trunk) {
+        int volumeSpace = trunk.WIDTH * trunk.HEIGHT;
+        int volumeBoxes = trunk.getBoxes().stream()
+                .mapToInt(Box::getVolume)
+                .sum();
+        if (volumeBoxes == 0) {
+            return 1;
+        }
+        return volumeBoxes / volumeSpace;
+
+    }
 }

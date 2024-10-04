@@ -20,14 +20,29 @@ public class TruckRepository {
         this.filePath = filePath;
     }
 
+    /**
+     * Записывает грузовики в файл {@code filePath}
+     *
+     * @param truckList Список грузовиков
+     */
     public void write(List<Truck> truckList) {
         jsonWriter.write(filePath, truckList);
     }
 
+    /**
+     * Записывает грузовики в файл {@code filePath}
+     * @param filePath Файл куда записать грузовики
+     * @param truckList Список грузовиков
+     */
     public void write(String filePath, List<Truck> truckList) {
         jsonWriter.write(filePath, truckList);
     }
 
+    /**
+     *
+     * @param filePath Файл откуда читать грузовики
+     * @return Спиок грузовиков
+     */
     public List<Truck> read(String filePath) {
         return jsonReader.read(filePath);
     }

@@ -14,6 +14,12 @@ public class TxtBoxService {
         this.txtBoxParser = txtBoxParser;
     }
 
+    /**
+     * Получаем все коробки из файла
+     *
+     * @param fileName Название файла
+     * @return Список коробок из файла
+     */
     public List<Box> getAll(String fileName) {
         return txtBoxParser.parseBoxFromFile(fileName);
     }

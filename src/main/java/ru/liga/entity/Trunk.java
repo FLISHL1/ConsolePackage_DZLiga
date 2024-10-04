@@ -39,18 +39,6 @@ public class Trunk {
     }
 
 
-    /**
-     * Просчитывает оставшийся свобоный объем в багажнике
-     *
-     * @return Оставшееся свободный обьем
-     */
-    public int calculateLatestVolume(){
-        int volumeSpace = WIDTH*HEIGHT;
-        int volumeBoxes = boxes.stream()
-                .mapToInt(Box::getVolume)
-                .sum();
-        return volumeSpace - volumeBoxes;
 
-    }
 }
 

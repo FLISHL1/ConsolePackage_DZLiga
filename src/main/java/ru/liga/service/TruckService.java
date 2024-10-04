@@ -9,10 +9,8 @@ import ru.liga.entity.Trunk;
 import ru.liga.exception.BoxNotFoundException;
 import ru.liga.truckLoader.TruckLoader;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 @Service
@@ -21,22 +19,27 @@ public class TruckService {
     private final JsonTruckService jsonTruckService;
     private final BoxService boxService;
     private final TxtBoxService txtBoxService;
+    private final TrunkService trunkService;
 
-    public TruckService(JsonTruckService jsonTruckService, BoxService boxService, TxtBoxService txtBoxService) {
+    public TruckService(JsonTruckService jsonTruckService, BoxService boxService, TxtBoxService txtBoxService, TrunkService trunkService) {
         this.jsonTruckService = jsonTruckService;
         this.boxService = boxService;
         this.txtBoxService = txtBoxService;
+        this.trunkService = trunkService;
     }
 
     /**
-     * Сортирует по возрастанию свобоного места список грузовиков
+     * Сортирует по убыванию процента занятого  места в грузовиках
      *
      * @param trucks Список грузовиков
-     * @return Отсортированный по возрастанию свободного места список грузовиков
+     * @return Отсортированный по убыванию процента занятого  места в грузовиках
      */
     public List<Truck> sortTrucksByFreeVolume(List<Truck> trucks) {
         return trucks.stream()
-                .sorted((truck2, truck1) -> Integer.compare(truck1.getTrunk().calculateLatestVolume(), truck2.getTrunk().calculateLatestVolume()))
+                .sorted((truck2, truck1) ->
+                        Integer.compare(trunkService.calculatePercentOccupiedVolume(truck1.getTrunk()),
+                                trunkService.calculatePercentOccupiedVolume(truck2.getTrunk())
+                        ))
                 .toList();
     }
 
@@ -63,28 +66,49 @@ public class TruckService {
         return countTypeBox;
     }
 
-    public List<Truck> fillTrucksWithBoxesByName(String filePath, Integer maxCountTruck, int width, int height, TruckLoader truckLoader) {
+    /**
+     * @param filePath    путь до файла посылок
+     * @param trucksSize  Массив строк с размерами грузовиков
+     * @param truckLoader Способ загрузки
+     * @return Список загруженных грузовиков
+     */
+    public List<Truck> fillTrucksWithBoxesByName(String filePath, String[] trucksSize, TruckLoader truckLoader) {
         List<Box> boxes = txtBoxService.getAll(filePath);
-        List<Truck> trucksLoaded = truckLoader.load(boxes, maxCountTruck, width, height);
-        jsonTruckService.save(trucksLoaded);
+        List<Truck> trucksLoaded = getfilledTrucks(trucksSize, truckLoader, boxes);
         return trucksLoaded;
     }
 
-    public List<Truck> fillTrucksWithBoxesByName(String[] boxesData, Integer maxCountTruck, int width, int height, TruckLoader truckLoader) {
-        List<Box> boxes = boxService.getByNames(boxesData).stream()
+    /**
+     * @param boxesName   Список имен типов коробок
+     * @param trucksSize  Массив строк с размерами грузовиков
+     * @param truckLoader Способ загрузки
+     * @return Список загруженных грузовиков
+     * @throws BoxNotFoundException Не найдена коробка из списка имен
+     */
+    public List<Truck> fillTrucksWithBoxesByName(String[] boxesName, String[] trucksSize, TruckLoader truckLoader) {
+        List<Box> boxes = boxService.getByNames(boxesName).stream()
                 .map(obj -> obj.orElseThrow(BoxNotFoundException::new))
                 .collect(Collectors.toList());
+        List<Truck> trucksLoaded = getfilledTrucks(trucksSize, truckLoader, boxes);
+        return trucksLoaded;
+    }
 
-        List<Truck> trucksLoaded = truckLoader.load(boxes, maxCountTruck, width, height);
+    private List<Truck> getfilledTrucks(String[] trucksSize, TruckLoader truckLoader, List<Box> boxes) {
+        List<Truck> trucks = createListTrucks(trucksSize);
+        List<Truck> trucksLoaded = truckLoader.load(boxes, trucks);
         jsonTruckService.save(trucksLoaded);
         return trucksLoaded;
     }
 
-    public List<Truck> createListTrucks(Integer countTrucks, int width, int height) {
+    private List<Truck> createListTrucks(String[] truckSize) {
         List<Truck> trucks = new ArrayList<>();
-        for (int i = 0; i < countTrucks; i++) {
-            trucks.add(new Truck(new Trunk(width, height)));
-            log.info("Truck #{} created.", i + 1);
+        AtomicInteger iIndex = new AtomicInteger();
+        final int INDEX_WIDTH = 0;
+        final int INDEX_HEIGHT = 1;
+        for (String size : truckSize) {
+            List<Integer> sizeInt = Arrays.stream(size.split("x")).map(Integer::parseInt).toList();
+            trucks.add(new Truck(new Trunk(sizeInt.get(INDEX_WIDTH), sizeInt.get(INDEX_HEIGHT))));
+            log.info("Truck #{} created with size {}.", iIndex.getAndIncrement(), size);
         }
         return trucks;
     }

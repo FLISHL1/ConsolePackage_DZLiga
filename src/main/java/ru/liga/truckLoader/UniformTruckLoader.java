@@ -30,15 +30,10 @@ public class UniformTruckLoader implements TruckLoader {
      * Распределяет коробки по объему
      *
      * @param boxes Список коробок для погрузки
-     * @param countTrucks Количество грузовиков по которым нужно распределить коробки
+     * @param trucks Количество грузовиков по которым нужно распределить коробки
      * @return Список погруженных грузовиков
      * @throws LoadingCapacityExceededException Указывает на то что коробка не момещается ни в один из грузовиков
      */
-    @Override
-    public List<Truck> load(List<Box> boxes, Integer countTrucks, int width, int height) {
-        return load(boxes, truckService.createListTrucks(countTrucks, width, height));
-    }
-
     @Override
     public List<Truck> load(List<Box> boxes, List<Truck> trucks) {
         log.info("Starting the loading process. Number of boxes: {}, Number of trucks: {}", boxes.size(), trucks);

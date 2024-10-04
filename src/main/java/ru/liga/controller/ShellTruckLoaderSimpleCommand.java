@@ -33,37 +33,30 @@ public class ShellTruckLoaderSimpleCommand {
     }
 
     @ShellMethod(value = "Загрузка коробок в грузовик из файла максимально эффективным способом", key = "loader-truck-maximal-file")
-    public void maximalLoaderTruck(
+    private void maximalLoaderTruck(
             @ShellOption(help = "Путь до файла с посылками в формате .txt для погрузка из папки resources", value = {"filePath", "-f"})
             String filePath,
-            @ShellOption(help = "Максимальное количество грузовиков для погрузки", value = {"maxCountTruck", "-m"})
-            Integer maxCountTruck,
-            @ShellOption(help = "Ширина багажника грузовика", value = {"widthTruck"}, defaultValue = "6")
-            Integer width,
-            @ShellOption(help = "Высота багажника грузовика", value = {"heightTruck"}, defaultValue = "6")
-            Integer height
+            @ShellOption(help = "Перечисление размеров грузовиков, каждый размер это один грузовик\n Пример: 6x6 12x2", value = {"sizeTrucks", "-s"}, arity = Integer.MAX_VALUE - 1)
+            String[] trucksSizes
     ) {
-        fillTruckWithBoxes(filePath, maxCountTruck, maximalTruckLoader, width, height);
+
+        fillTruckWithBoxes(filePath, trucksSizes, maximalTruckLoader);
     }
 
     @ShellMethod(value = "Загрузка коробок в грузовик из файла равномерно", key = "loader-truck-uniform-file")
-    public void uniformLoaderTruck(
+    private void uniformLoaderTruck(
             @ShellOption(help = "Путь до файла с посылками в формате .txt для погрузка из папки resources", value = {"filePath", "-f"})
             String filePath,
-            @ShellOption(help = "Максимальное количество грузовиков для погрузки", value = {"maxCountTruck", "-m"})
-            Integer maxCountTruck,
-            @ShellOption(help = "Указывает ширину багажника грузовика", value = {"widthTruck"}, defaultValue = "6")
-            Integer width,
-            @ShellOption(help = "Указывает высоту багажника грузовика", value = {"heightTruck"}, defaultValue = "6")
-            Integer height
+            @ShellOption(help = "Перечисление размеров грузовиков, каждый размер это один грузовик\n Пример: 6x6 12x2", value = {"sizeTrucks", "-s"}, arity = Integer.MAX_VALUE - 1)
+            String[] trucksSizes
     ) {
-        fillTruckWithBoxes(filePath, maxCountTruck, uniformTruckLoader, width, height);
+        fillTruckWithBoxes(filePath, trucksSizes, uniformTruckLoader);
     }
 
 
-    private void fillTruckWithBoxes(String filePath, Integer maxCountTruck, TruckLoader truckLoader, int width, int height) {
+    private void fillTruckWithBoxes(String filePath, String[] truckSize, TruckLoader truckLoader) {
         shellFileValidator.checkFileName(fileNameValidator.validateTxt(filePath));
-        List<Truck> trucks = truckService.fillTrucksWithBoxesByName(filePath, maxCountTruck, width, height, truckLoader);
+        List<Truck> trucks = truckService.fillTrucksWithBoxesByName(filePath, truckSize, truckLoader);
         terminal.writer().println("Погруженные грузовики: ");
         for (Truck truck : trucks) {
             terminal.writer().println(truck.toString());

@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import ru.liga.entity.Box;
+import ru.liga.exception.ReadJsonException;
 import ru.liga.util.Reader;
 
 import java.io.File;
@@ -24,8 +25,10 @@ public class JsonBoxReader implements Reader<List<Box>> {
     }
 
     /**
-     *
-     * @return Список коробок
+     *  Читает файл json, возвращая список коробок
+     * @param filePath Путь до файла json с коробками
+     * @return {@code List<Box>} - Список коробок
+     * @throws ReadJsonException Ошибка в чтении файла json
      */
     public List<Box> read(String filePath){
         try {
@@ -36,7 +39,7 @@ public class JsonBoxReader implements Reader<List<Box>> {
             return boxes;
         } catch (IOException e) {
             log.error("Error with read file: {}, exception: {}", filePath, e.getMessage());
-            throw new RuntimeException(e);
+            throw new ReadJsonException(e.getMessage());
         }
     }
 }

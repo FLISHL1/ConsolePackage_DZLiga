@@ -31,20 +31,40 @@ public class BoxService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Сменяет знак пространства коробки
+     *
+     * @param box       Коробка для изменения символа заполния
+     * @param charSpace Новый символ заполнения коробки
+     */
     public void changeCharSpace(Box box, String charSpace) {
         for (List<String> line : box.getSpace()) {
             line.replaceAll(ignored -> charSpace);
         }
     }
 
+    /**
+     * Получения всех коробок
+     * @return Список коробок
+     */
     public List<Box> getAll() {
         return boxRepository.findAll();
     }
 
+    /**
+     * Получает коробку по имения
+     * @param name Имя коробки
+     * @return Коробка
+     */
     public Optional<Box> getByName(String name) {
         return Optional.ofNullable(boxRepository.findByName(name));
     }
 
+    /**
+     * Получает список всех коробок по именно
+     * @param names Массив имен коробок
+     * @return Список коробок
+     */
     public List<Optional<Box>> getByNames(String[] names) {
         List<Optional<Box>> boxes = new ArrayList<>();
         for (String name : names) {
@@ -53,7 +73,10 @@ public class BoxService {
         return boxes;
     }
 
-
+    /**
+     * Сохраняет короюку
+     * @param box Коробка для сохранения
+     */
     public void save(Box box) {
         if (getByName(box.getName()).isPresent()) {
             throw new IdentityNameBoxException();
@@ -61,19 +84,36 @@ public class BoxService {
         boxRepository.save(box);
     }
 
+    /**
+     * Обновляет коробку
+     * @param box Коробка для обновления
+     */
     public void update(Box box) {
         boxRepository.update(box);
     }
 
+    /**
+     * Обновляет коробку если было изменено имя
+     * @param box Коробка для обновления
+     * @param oldName Прошлое имя коробки
+     */
     public void update(Box box, String oldName) {
         remove(oldName);
         boxRepository.save(box);
     }
 
+    /**
+     * Удаляет коробку
+     * @param box Коробка для удаления
+     */
     public void remove(Box box) {
         boxRepository.remove(box);
     }
 
+    /**
+     * Удаляет коробку по имени
+     * @param name Имя коробки для удаления
+     */
     public void remove(String name) {
         Box box = boxRepository.findByName(name);
         if (box == null) {

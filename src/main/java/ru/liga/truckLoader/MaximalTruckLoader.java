@@ -7,7 +7,6 @@ import ru.liga.entity.Box;
 import ru.liga.entity.Truck;
 import ru.liga.exception.LoadingCapacityExceededException;
 import ru.liga.service.BoxService;
-import ru.liga.service.TruckService;
 import ru.liga.service.TrunkService;
 
 import java.util.ArrayList;
@@ -18,12 +17,10 @@ public class MaximalTruckLoader implements TruckLoader {
     private static final Logger log = LoggerFactory.getLogger(MaximalTruckLoader.class);
     private final TrunkService trunkService;
     private final BoxService boxService;
-    private final TruckService truckService;
 
-    public MaximalTruckLoader(TrunkService trunkService, BoxService boxService, TruckService truckService) {
+    public MaximalTruckLoader(TrunkService trunkService, BoxService boxService) {
         this.trunkService = trunkService;
         this.boxService = boxService;
-        this.truckService = truckService;
     }
 
 
@@ -31,15 +28,10 @@ public class MaximalTruckLoader implements TruckLoader {
      * Грузит в грузовики коробки заполняя практически все свобоное место
      *
      * @param boxes Список коробок для погрузки
-     * @param countTrucks Максимально количество грузовиков для погрузки
+     * @param trucks Список грузовиков
      * @return Список погруженных грузовиков
      * @throws LoadingCapacityExceededException Для погрузки всех посылок не хватает заданого количества грузовиков
      */
-    @Override
-    public List<Truck> load(List<Box> boxes, Integer countTrucks, int width, int height) {
-        return load(boxes, truckService.createListTrucks(countTrucks, width, height));
-    }
-
     @Override
     public List<Truck> load(List<Box> boxes, List<Truck> trucks) {
         final int FIRST_INDEX = 0;
