@@ -1,25 +1,25 @@
 package ru.liga.repository;
 
 import jakarta.annotation.Nullable;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 import ru.liga.entity.Box;
 import ru.liga.exception.IdentityNameBoxException;
-import ru.liga.util.Reader;
-import ru.liga.util.Writer;
+import ru.liga.mapper.BoxMapper;
 
 import java.util.List;
 
 @Repository
 public class BoxRepository {
-    private final Writer<List<Box>> jsonWriter;
-    private final Reader<List<Box>> jsonReader;
-    private final String filePath;
+    private final NamedParameterJdbcTemplate namedJdbcTemplate;
+    private final BoxMapper boxMapper;
 
-    public BoxRepository(Writer<List<Box>> jsonWriter, Reader<List<Box>> jsonReader, @Value("${util.json.box.file}") String filePath) {
-        this.jsonWriter = jsonWriter;
-        this.jsonReader = jsonReader;
-        this.filePath = filePath;
+    public BoxRepository(NamedParameterJdbcTemplate namedJdbcTemplate, BoxMapper boxMapper) {
+        this.namedJdbcTemplate = namedJdbcTemplate;
+        this.boxMapper = boxMapper;
     }
 
     /**
@@ -28,7 +28,8 @@ public class BoxRepository {
      * @return Список коробок
      */
     public List<Box> findAll() {
-        return jsonReader.read(filePath);
+        String sql = "SELECT * FROM public.boxes;";
+        return namedJdbcTemplate.query(sql, boxMapper);
     }
 
     /**
@@ -38,7 +39,11 @@ public class BoxRepository {
      * @throws IdentityNameBoxException Ошибка идентичности коробки (повторяются имена)
      */
     public @Nullable Box findByName(String name) {
-        List<Box> boxes = findAll().stream().filter(box -> box.getName().equalsIgnoreCase(name)).toList();
+
+        String sql = "SELECT * FROM public.boxes WHERE name = :name";
+        SqlParameterSource namedParameter = new MapSqlParameterSource()
+                .addValue("name", name);
+        List<Box> boxes = namedJdbcTemplate.query(sql, namedParameter, boxMapper);
         if (boxes.size() > 1) {
             throw new IdentityNameBoxException();
         } else if (boxes.isEmpty()) {
@@ -49,21 +54,38 @@ public class BoxRepository {
 
     /**
      * Сохраняет тип коробки
-     * @param saveBox Коробка для сохранения
+     * @param box Коробка для сохранения
      */
-    public void save(Box saveBox) {
-        List<Box> boxes = findAll();
-        boxes.add(saveBox);
-        jsonWriter.write(filePath, boxes);
+    public Box save(Box box) {
+        SimpleJdbcInsert jdbcInsert = new SimpleJdbcInsert(namedJdbcTemplate.getJdbcTemplate());
+
+        SqlParameterSource parameterSource = new MapSqlParameterSource()
+                .addValue("name", box.getName())
+                .addValue("width", box.getWidth())
+                .addValue("height", box.getHeight())
+                .addValue("space", boxMapper.mapListSpaceToStringSpace(box.getSpace()));
+        Number id = jdbcInsert.withTableName("boxes").usingGeneratedKeyColumns("id").executeAndReturnKey(parameterSource);
+        box.setId(id.intValue());
+        return box;
     }
 
     /**
      * Обновление коробки полностью
-     * @param updateBox Коробка для обновления
+     * @param box Коробка для обновления
      */
-    public void update(Box updateBox){
-        remove(updateBox);
-        save(updateBox);
+    public void update(Box box) {
+        String sql = """
+                UPDATE boxes
+                SET name = :name, width = :width, height = :height, space = :space
+                WHERE id = :id
+                """;
+        SqlParameterSource parameterSource = new MapSqlParameterSource()
+                .addValue("id", box.getId())
+                .addValue("name", box.getName())
+                .addValue("width", box.getWidth())
+                .addValue("height", box.getHeight())
+                .addValue("space", boxMapper.mapListSpaceToStringSpace(box.getSpace()));
+        namedJdbcTemplate.update(sql, parameterSource);
     }
 
     /**
@@ -71,9 +93,17 @@ public class BoxRepository {
      * @param box Коробка для удаления
      */
     public void remove(Box box) {
-        List<Box> boxes = findAll();
-        boxes.remove(box);
-        jsonWriter.write(filePath, boxes);
+        String sql = "DELETE FROM boxes WHERE id = :id";
+        SqlParameterSource sqlParameterSource = new MapSqlParameterSource()
+                .addValue("id", box.getId());
+        namedJdbcTemplate.update(sql, sqlParameterSource);
+    }
+
+    public void removeByName(String name) {
+        String sql = "DELETE FROM boxes WHERE name = :name";
+        SqlParameterSource sqlParameterSource = new MapSqlParameterSource()
+                .addValue("name", name);
+        namedJdbcTemplate.update(sql, sqlParameterSource);
     }
 
 }

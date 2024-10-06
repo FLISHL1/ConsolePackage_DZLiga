@@ -10,6 +10,8 @@ import java.util.Objects;
 
 public class Box {
     @JsonIgnore
+    private int id;
+    @JsonIgnore
     private int volume;
     @JsonIgnore
     private int width;
@@ -18,15 +20,12 @@ public class Box {
     private List<List<String>> space;
     private String name;
 
-    public Box(List<List<String>> space) {
-        this(null, space);
-    }
+
 
     @JsonCreator
     public Box(String name, List<List<String>> space) {
         this.name = name;
         setSpace(space);
-        volume = height * width;
     }
 
     public String getName() {
@@ -43,11 +42,16 @@ public class Box {
 
     public void setSpace(List<List<String>> space) {
         this.space = space;
+        calcSize(space);
+    }
+
+    private void calcSize(List<List<String>> space) {
         height = space.size();
         width = space.stream()
                 .max(Comparator.comparingInt(List::size))
                 .orElse(new ArrayList<>())
                 .size();
+        volume = height * width;
     }
 
     public int getVolume() {
@@ -60,6 +64,14 @@ public class Box {
 
     public int getHeight() {
         return height;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     @Override

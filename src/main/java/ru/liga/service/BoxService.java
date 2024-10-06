@@ -93,16 +93,6 @@ public class BoxService {
     }
 
     /**
-     * Обновляет коробку если было изменено имя
-     * @param box Коробка для обновления
-     * @param oldName Прошлое имя коробки
-     */
-    public void update(Box box, String oldName) {
-        remove(oldName);
-        boxRepository.save(box);
-    }
-
-    /**
      * Удаляет коробку
      * @param box Коробка для удаления
      */
@@ -115,10 +105,6 @@ public class BoxService {
      * @param name Имя коробки для удаления
      */
     public void remove(String name) {
-        Box box = boxRepository.findByName(name);
-        if (box == null) {
-            throw new BoxNotFoundException();
-        }
-        boxRepository.remove(box);
+        boxRepository.removeByName(name);
     }
 }

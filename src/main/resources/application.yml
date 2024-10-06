@@ -1,0 +1,40 @@
+server:
+  port: 8080
+
+spring:
+  shell:
+    script:
+      enabled: true
+    interactive:
+      enabled: true
+  db:
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password: postgres
+    driver-class-name: "org.postgresql.Driver"
+  flyway:
+    enabled: true
+    default-schema: public
+    locations: classpath:migration
+    driver-class-name: "org.postgresql.Driver"
+    password: postgres
+    user: postgres
+    url: jdbc:postgresql://localhost:5432/postgres
+
+
+logging:
+    level:
+        org:
+          springframework:
+              shell: INFO
+
+
+
+
+util:
+  json:
+    truck:
+      write:
+        file: src/main/resources/json/trucks.json
+    box:
+      file: src/main/resources/json/boxes.json

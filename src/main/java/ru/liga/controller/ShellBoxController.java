@@ -80,13 +80,7 @@ public class ShellBoxController {
         Box box = boxService.getByName(name).orElseThrow(BoxNotFoundException::new);
         spaceOpt.ifPresent(box::setSpace);
         charSpaceOpt.ifPresent((ch) -> boxService.changeCharSpace(box, ch));
-        if (newNameOpt.isPresent()){
-            String oldName = box.getName();
-            box.setName(newNameOpt.get());
-            boxService.update(box, oldName);
-        } else {
-            boxService.update(box);
-        }
+        boxService.update(box);
         southBox(box);
     }
 

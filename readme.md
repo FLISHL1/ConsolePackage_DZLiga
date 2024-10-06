@@ -40,7 +40,7 @@
         - Есть две команды для двух алгоритмов погрущки:
             - **Равномерная погрузка**.
               ```shell
-                  loader-truck-uniform-box -b test test test -s 6x6 1x3 5x5 12x12
+                  loader-truck-uniform-box -b test test test test -s 6x6 1x3 5x5 12x12
               ```
             - **Максимальная погрузка**.
               ```shell
@@ -53,7 +53,7 @@
     - Для указания пути до файла нужно использовать флаги `-f or --filePath`
     - Команда для вызова счета:
       ```shell
-                count-box-in-trucks -f testTruck.json
+                count-box-in-trucks -f truckTest.json
       ```
 
 4. **Работа с типа посылок**

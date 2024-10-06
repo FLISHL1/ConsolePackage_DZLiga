@@ -11,9 +11,10 @@ import java.util.List;
 public class TxtBoxParser {
     private static final Logger log = LoggerFactory.getLogger(TxtBoxParser.class);
     private final Reader<List<String>> txtReader;
-
-    public TxtBoxParser(Reader<List<String>> txtReader) {
+    private final BoxParser boxParser;
+    public TxtBoxParser(Reader<List<String>> txtReader, BoxParser boxParser) {
         this.txtReader = txtReader;
+        this.boxParser = boxParser;
     }
 
 
@@ -24,7 +25,7 @@ public class TxtBoxParser {
      */
     public List<Box> parseBoxFromFile(String fileName){
         List<String> readingLines = txtReader.read(fileName);
-        return new BoxParser().parse(readingLines);
+        return boxParser.parse(readingLines);
 
     }
 
