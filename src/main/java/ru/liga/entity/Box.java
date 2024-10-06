@@ -28,6 +28,12 @@ public class Box {
         setSpace(space);
     }
 
+    public Box(int id, String name, List<List<String>> space) {
+        this.id = id;
+        this.name = name;
+        setSpace(space);
+    }
+
     public String getName() {
         return name;
     }

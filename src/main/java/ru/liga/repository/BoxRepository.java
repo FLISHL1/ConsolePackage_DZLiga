@@ -1,6 +1,8 @@
 package ru.liga.repository;
 
 import jakarta.annotation.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
@@ -10,10 +12,13 @@ import ru.liga.entity.Box;
 import ru.liga.exception.IdentityNameBoxException;
 import ru.liga.mapper.BoxMapper;
 
+import java.sql.Types;
+import java.util.Arrays;
 import java.util.List;
 
 @Repository
 public class BoxRepository {
+    private static final Logger log = LoggerFactory.getLogger(BoxRepository.class);
     private final NamedParameterJdbcTemplate namedJdbcTemplate;
     private final BoxMapper boxMapper;
 
@@ -74,18 +79,17 @@ public class BoxRepository {
      * @param box Коробка для обновления
      */
     public void update(Box box) {
-        String sql = """
-                UPDATE boxes
-                SET name = :name, width = :width, height = :height, space = :space
-                WHERE id = :id
-                """;
+        log.debug("{}", box);
+        String sql = "UPDATE boxes SET name = :name, width = :width, height = :height, space = :space WHERE id = :id;";
         SqlParameterSource parameterSource = new MapSqlParameterSource()
-                .addValue("id", box.getId())
-                .addValue("name", box.getName())
-                .addValue("width", box.getWidth())
-                .addValue("height", box.getHeight())
-                .addValue("space", boxMapper.mapListSpaceToStringSpace(box.getSpace()));
-        namedJdbcTemplate.update(sql, parameterSource);
+                .addValue("id", box.getId(), Types.INTEGER)
+                .addValue("name", box.getName(), Types.VARCHAR)
+                .addValue("width", box.getWidth(), Types.INTEGER)
+                .addValue("height", box.getHeight(), Types.INTEGER)
+                .addValue("space", boxMapper.mapListSpaceToStringSpace(box.getSpace()), Types.VARCHAR);
+        log.debug("{}", namedJdbcTemplate.update(sql, parameterSource));
+
+
     }
 
     /**

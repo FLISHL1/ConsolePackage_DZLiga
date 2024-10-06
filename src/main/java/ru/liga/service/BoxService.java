@@ -77,11 +77,11 @@ public class BoxService {
      * Сохраняет короюку
      * @param box Коробка для сохранения
      */
-    public void save(Box box) {
+    public Box save(Box box) {
         if (getByName(box.getName()).isPresent()) {
             throw new IdentityNameBoxException();
         }
-        boxRepository.save(box);
+        return boxRepository.save(box);
     }
 
     /**

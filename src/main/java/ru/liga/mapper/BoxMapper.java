@@ -23,7 +23,7 @@ public class BoxMapper implements RowMapper<Box> {
     public Box mapRow(ResultSet rs, int rowNum) throws SQLException {
         String space = rs.getString("space");
         List<List<String>> spaceList = mapSpaceStringToList(space);
-        return new Box(rs.getString("name"), spaceList);
+        return new Box(rs.getInt("id"), rs.getString("name"), spaceList);
     }
 
     private List<List<String>> mapSpaceStringToList(String spaceData) {
