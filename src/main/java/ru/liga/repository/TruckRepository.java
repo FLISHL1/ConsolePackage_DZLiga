@@ -2,6 +2,7 @@ package ru.liga.repository;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.multipart.MultipartFile;
 import ru.liga.entity.Truck;
 import ru.liga.util.Reader;
 import ru.liga.util.Writer;
@@ -50,4 +51,8 @@ public class TruckRepository {
     public List<Truck> read() {
         return jsonReader.read(filePath);
     }
+    public List<Truck> read(MultipartFile multipartFile) {
+        return jsonReader.read(multipartFile);
+    }
+
 }

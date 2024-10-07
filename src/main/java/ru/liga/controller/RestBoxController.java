@@ -1,5 +1,6 @@
 package ru.liga.controller;
 
+import jakarta.validation.constraints.NotBlank;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.liga.dto.BoxDtoRequest;
@@ -27,7 +28,7 @@ public class RestBoxController {
     }
 
     @GetMapping("/{name}")
-    private ResponseEntity<Box> getByName(@PathVariable("name") String name) {
+    private ResponseEntity<Box> getByName(@PathVariable("name") @NotBlank String name) {
         Box box = boxService.getByName(name).orElseThrow(BoxNotFoundException::new);
         return ResponseEntity.ok(box);
     }
@@ -41,7 +42,7 @@ public class RestBoxController {
 
     @PutMapping("/{name}")
     private ResponseEntity update(
-            @PathVariable("name") String name,
+            @PathVariable("name") @NotBlank String name,
             @RequestBody BoxDtoRequest boxDtoRequest
     ) {
         Optional<String> newNameOpt = Optional.ofNullable(boxDtoRequest.getName());
@@ -58,7 +59,7 @@ public class RestBoxController {
 
     @PatchMapping("/{name}")
     private ResponseEntity updatePart(
-            @PathVariable("name") String name,
+            @PathVariable("name") @NotBlank String name,
             @RequestBody BoxDtoRequest boxDtoRequest
     ) {
         Optional<String> newNameOpt = Optional.ofNullable(boxDtoRequest.getName());
@@ -75,7 +76,7 @@ public class RestBoxController {
 
     @DeleteMapping("/{name}")
     private ResponseEntity remove(
-            @PathVariable("name") String name
+            @PathVariable("name") @NotBlank String name
     ) {
         boxService.remove(name);
         return ResponseEntity.ok().build();

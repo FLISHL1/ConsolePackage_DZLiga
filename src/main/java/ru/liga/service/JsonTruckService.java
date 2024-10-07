@@ -1,6 +1,7 @@
 package ru.liga.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import ru.liga.entity.Truck;
 import ru.liga.repository.TruckRepository;
 
@@ -36,6 +37,15 @@ public class JsonTruckService {
      */
     public List<Truck> getAll(String filePath) {
         return truckRepository.read(filePath);
+    }
+
+    /**
+     * Читает грузовики из строчки json
+     * @param multipartJson
+     * @return Список грузовиков в файле
+     */
+    public List<Truck> getAll(MultipartFile multipartJson) {
+        return truckRepository.read(multipartJson);
     }
 
     /**

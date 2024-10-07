@@ -11,7 +11,6 @@ import ru.liga.service.JsonTruckService;
 import ru.liga.service.TruckService;
 import ru.liga.validator.FileNameValidator;
 
-import java.util.List;
 import java.util.Map;
 
 @ShellComponent
@@ -20,14 +19,12 @@ public class ShellTruckCommand {
     private final Terminal terminal;
     private final FileNameValidator fileNameValidator;
     private final TruckService truckService;
-    private final JsonTruckService jsonTruckService;
     private final ShellFileValidator shellFileValidator;
 
-    public ShellTruckCommand(Terminal terminal, FileNameValidator fileNameValidator, TruckService truckService, JsonTruckService jsonTruckService, ShellFileValidator shellFileValidator) {
+    public ShellTruckCommand(Terminal terminal, FileNameValidator fileNameValidator, TruckService truckService, ShellFileValidator shellFileValidator) {
         this.terminal = terminal;
         this.fileNameValidator = fileNameValidator;
         this.truckService = truckService;
-        this.jsonTruckService = jsonTruckService;
         this.shellFileValidator = shellFileValidator;
     }
 
@@ -38,7 +35,7 @@ public class ShellTruckCommand {
             String filePath
     ) {
         shellFileValidator.checkFileName(fileNameValidator.validateJson(filePath));
-        Map<Truck, Map<Box, Integer>> countBoxInTrucks = calcCountBoxInTruckFromJson(filePath);
+        Map<Truck, Map<Box, Integer>> countBoxInTrucks = truckService.calcCountBoxInTruckFromJson(filePath);
         terminal.writer().println("Ниже будет указанно сколько и каких посылок было в грузовиках");
         for (Truck truck : countBoxInTrucks.keySet()) {
             terminal.writer().println("---------------------------");
@@ -47,11 +44,6 @@ public class ShellTruckCommand {
             }
             terminal.writer().println("Вид загруженного грузовика: \n" + truck);
         }
-    }
-
-    private Map<Truck, Map<Box, Integer>> calcCountBoxInTruckFromJson(String filePath) {
-        List<Truck> trucks = jsonTruckService.getAll(filePath);
-        return truckService.countBoxInTrucks(trucks);
     }
 
 

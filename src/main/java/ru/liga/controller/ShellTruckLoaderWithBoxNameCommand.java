@@ -6,7 +6,7 @@ import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
 import ru.liga.entity.Truck;
-import ru.liga.service.TruckService;
+import ru.liga.service.FillTruckService;
 import ru.liga.truckLoader.TruckLoader;
 
 import java.util.List;
@@ -15,14 +15,14 @@ import java.util.List;
 @ShellCommandGroup("Truck-command")
 public class ShellTruckLoaderWithBoxNameCommand {
     private final Terminal terminal;
-    private final TruckService truckService;
+    private final FillTruckService fillTruckService;
     private final TruckLoader maximalTruckLoader;
     private final TruckLoader uniformTruckLoader;
 
 
-    public ShellTruckLoaderWithBoxNameCommand(Terminal terminal, TruckService truckService, TruckLoader maximalTruckLoader, TruckLoader uniformTruckLoader) {
+    public ShellTruckLoaderWithBoxNameCommand(Terminal terminal, FillTruckService fillTruckService, TruckLoader maximalTruckLoader, TruckLoader uniformTruckLoader) {
         this.terminal = terminal;
-        this.truckService = truckService;
+        this.fillTruckService = fillTruckService;
         this.maximalTruckLoader = maximalTruckLoader;
         this.uniformTruckLoader = uniformTruckLoader;
     }
@@ -49,7 +49,7 @@ public class ShellTruckLoaderWithBoxNameCommand {
 
 
     private void fillTruckWithBoxes(String[] boxNames, String[] truckSize, TruckLoader truckLoader) {
-        List<Truck> trucks = truckService.fillTrucksWithBoxesByName(boxNames, truckSize, truckLoader);
+        List<Truck> trucks = fillTruckService.fillTrucksWithBoxesByName(boxNames, truckSize, truckLoader);
         terminal.writer().println("Погруженные грузовики: ");
         for (Truck truck : trucks) {
             terminal.writer().println(truck.toString());

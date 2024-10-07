@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Objects;
 
 public class Box {
-    @JsonIgnore
     private int id;
     @JsonIgnore
     private int volume;

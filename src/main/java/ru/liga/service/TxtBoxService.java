@@ -2,13 +2,14 @@ package ru.liga.service;
 
 import org.springframework.stereotype.Service;
 import ru.liga.entity.Box;
+import ru.liga.util.Parser;
 import ru.liga.util.TxtBoxParser;
 
 import java.util.List;
 
 @Service
 public class TxtBoxService {
-    private final TxtBoxParser txtBoxParser;
+    private final Parser<Box, String> txtBoxParser;
 
     public TxtBoxService(TxtBoxParser txtBoxParser) {
         this.txtBoxParser = txtBoxParser;
@@ -21,6 +22,6 @@ public class TxtBoxService {
      * @return Список коробок из файла
      */
     public List<Box> getAll(String fileName) {
-        return txtBoxParser.parseBoxFromFile(fileName);
+        return txtBoxParser.parse(fileName);
     }
 }

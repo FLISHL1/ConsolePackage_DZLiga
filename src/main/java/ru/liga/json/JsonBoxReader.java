@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
 import ru.liga.entity.Box;
 import ru.liga.exception.ReadJsonException;
 import ru.liga.util.Reader;
@@ -41,5 +42,10 @@ public class JsonBoxReader implements Reader<List<Box>> {
             log.error("Error with read file: {}, exception: {}", filePath, e.getMessage());
             throw new ReadJsonException(e.getMessage());
         }
+    }
+
+    @Override
+    public List<Box> read(MultipartFile file) {
+        return List.of();
     }
 }

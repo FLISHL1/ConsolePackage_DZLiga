@@ -6,7 +6,7 @@ import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
 import ru.liga.entity.Truck;
-import ru.liga.service.TruckService;
+import ru.liga.service.FillTruckService;
 import ru.liga.truckLoader.TruckLoader;
 import ru.liga.validator.FileNameValidator;
 
@@ -14,19 +14,19 @@ import java.util.List;
 
 @ShellComponent
 @ShellCommandGroup("Truck-command")
-public class ShellTruckLoaderSimpleCommand {
+public class ShellTruckLoaderFileCommand {
     private final Terminal terminal;
     private final FileNameValidator fileNameValidator;
-    private final TruckService truckService;
+    private final FillTruckService fillTruckService;
     private final ShellFileValidator shellFileValidator;
     private final TruckLoader maximalTruckLoader;
     private final TruckLoader uniformTruckLoader;
 
 
-    public ShellTruckLoaderSimpleCommand(Terminal terminal, FileNameValidator fileNameValidator, TruckService truckService, ShellFileValidator shellFileValidator, TruckLoader maximalTruckLoader, TruckLoader uniformTruckLoader) {
+    public ShellTruckLoaderFileCommand(Terminal terminal, FileNameValidator fileNameValidator, FillTruckService fillTruckService, ShellFileValidator shellFileValidator, TruckLoader maximalTruckLoader, TruckLoader uniformTruckLoader) {
         this.terminal = terminal;
         this.fileNameValidator = fileNameValidator;
-        this.truckService = truckService;
+        this.fillTruckService = fillTruckService;
         this.shellFileValidator = shellFileValidator;
         this.maximalTruckLoader = maximalTruckLoader;
         this.uniformTruckLoader = uniformTruckLoader;
@@ -56,7 +56,7 @@ public class ShellTruckLoaderSimpleCommand {
 
     private void fillTruckWithBoxes(String filePath, String[] truckSize, TruckLoader truckLoader) {
         shellFileValidator.checkFileName(fileNameValidator.validateTxt(filePath));
-        List<Truck> trucks = truckService.fillTrucksWithBoxesByName(filePath, truckSize, truckLoader);
+        List<Truck> trucks = fillTruckService.fillTrucksWithBoxesByFile(filePath, truckSize, truckLoader);
         terminal.writer().println("Погруженные грузовики: ");
         for (Truck truck : trucks) {
             terminal.writer().println(truck.toString());

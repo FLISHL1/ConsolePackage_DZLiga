@@ -3,28 +3,20 @@ package ru.liga.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import ru.liga.entity.Box;
 import ru.liga.entity.Truck;
-import ru.liga.entity.Trunk;
-import ru.liga.exception.BoxNotFoundException;
-import ru.liga.truckLoader.TruckLoader;
 
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 
 @Service
 public class TruckService {
     private static final Logger log = LoggerFactory.getLogger(TruckService.class);
     private final JsonTruckService jsonTruckService;
-    private final BoxService boxService;
-    private final TxtBoxService txtBoxService;
     private final TrunkService trunkService;
 
-    public TruckService(JsonTruckService jsonTruckService, BoxService boxService, TxtBoxService txtBoxService, TrunkService trunkService) {
+    public TruckService(JsonTruckService jsonTruckService, TrunkService trunkService) {
         this.jsonTruckService = jsonTruckService;
-        this.boxService = boxService;
-        this.txtBoxService = txtBoxService;
         this.trunkService = trunkService;
     }
 
@@ -52,13 +44,8 @@ public class TruckService {
         return countTypeBox;
     }
 
-    /**
-     * Считает во всех грузовиках количество коробок по типам формы
-     *
-     * @param trucks Список грузовиков
-     * @return Словарь с количеством каждого типа коробок
-     */
-    public Map<Truck, Map<Box, Integer>> countBoxInTrucks(List<Truck> trucks) {
+
+    private Map<Truck, Map<Box, Integer>> countBoxInTrucks(List<Truck> trucks) {
         Map<Truck, Map<Box, Integer>> countTypeBox = new HashMap<>();
         for (Truck truck : trucks) {
             countTypeBox.put(truck, countBoxInTruck(truck));
@@ -67,49 +54,25 @@ public class TruckService {
     }
 
     /**
-     * @param filePath    путь до файла посылок
-     * @param trucksSize  Массив строк с размерами грузовиков
-     * @param truckLoader Способ загрузки
-     * @return Список загруженных грузовиков
+     * Считает во всех грузовиках количество коробок по типам формы
+     *
+     * @param file файл с грузовиками
+     * @return Словарь с количеством каждого типа коробок
      */
-    public List<Truck> fillTrucksWithBoxesByName(String filePath, String[] trucksSize, TruckLoader truckLoader) {
-        List<Box> boxes = txtBoxService.getAll(filePath);
-        List<Truck> trucksLoaded = getfilledTrucks(trucksSize, truckLoader, boxes);
-        return trucksLoaded;
+    public Map<Truck, Map<Box, Integer>> calcCountBoxInTruckFromJson(MultipartFile file) {
+        List<Truck> trucks = jsonTruckService.getAll(file);
+        return countBoxInTrucks(trucks);
     }
 
     /**
-     * @param boxesName   Список имен типов коробок
-     * @param trucksSize  Массив строк с размерами грузовиков
-     * @param truckLoader Способ загрузки
-     * @return Список загруженных грузовиков
-     * @throws BoxNotFoundException Не найдена коробка из списка имен
+     * Считает во всех грузовиках количество коробок по типам формы
+     *
+     * @param filePath путь до файла с грузовиками
+     * @return Словарь с количеством каждого типа коробок
      */
-    public List<Truck> fillTrucksWithBoxesByName(String[] boxesName, String[] trucksSize, TruckLoader truckLoader) {
-        List<Box> boxes = boxService.getByNames(boxesName).stream()
-                .map(obj -> obj.orElseThrow(BoxNotFoundException::new))
-                .collect(Collectors.toList());
-        List<Truck> trucksLoaded = getfilledTrucks(trucksSize, truckLoader, boxes);
-        return trucksLoaded;
+    public Map<Truck, Map<Box, Integer>> calcCountBoxInTruckFromJson(String filePath) {
+        List<Truck> trucks = jsonTruckService.getAll(filePath);
+        return countBoxInTrucks(trucks);
     }
 
-    private List<Truck> getfilledTrucks(String[] trucksSize, TruckLoader truckLoader, List<Box> boxes) {
-        List<Truck> trucks = createListTrucks(trucksSize);
-        List<Truck> trucksLoaded = truckLoader.load(boxes, trucks);
-        jsonTruckService.save(trucksLoaded);
-        return trucksLoaded;
-    }
-
-    private List<Truck> createListTrucks(String[] truckSize) {
-        List<Truck> trucks = new ArrayList<>();
-        AtomicInteger iIndex = new AtomicInteger();
-        final int INDEX_WIDTH = 0;
-        final int INDEX_HEIGHT = 1;
-        for (String size : truckSize) {
-            List<Integer> sizeInt = Arrays.stream(size.split("x")).map(Integer::parseInt).toList();
-            trucks.add(new Truck(new Trunk(sizeInt.get(INDEX_WIDTH), sizeInt.get(INDEX_HEIGHT))));
-            log.info("Truck #{} created with size {}.", iIndex.getAndIncrement(), size);
-        }
-        return trucks;
-    }
 }
