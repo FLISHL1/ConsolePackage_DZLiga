@@ -25,7 +25,6 @@ public class FillTruckService {
     private final BoxService boxService;
     private final MultiPartBoxService multiPartBoxService;
     private final JsonTruckService jsonTruckService;
-    private final String REGEX_PLAIN = "[ ,]";
 
     public FillTruckService(TxtBoxService txtBoxService, BoxService boxService, MultiPartBoxService multiPartBoxService, JsonTruckService jsonTruckService) {
         this.txtBoxService = txtBoxService;
@@ -35,6 +34,8 @@ public class FillTruckService {
     }
 
     /**
+     * Загружает коробки из файла в грузовики заданого размера и выбранным способом
+     *
      * @param filePath    путь до файла посылок
      * @param trucksSize  Массив строк с размерами грузовиков
      * @param truckLoader Способ загрузки
@@ -45,34 +46,44 @@ public class FillTruckService {
         return fillTrucks(trucksSize, truckLoader, boxes);
     }
 
+    /**
+     * Загружает коробки из файла в грузовики заданого размера и выбранным способом
+     *
+     * @param file        Файл строчкой
+     * @param trucksSize  Массив строк с размерами грузовиков
+     * @param truckLoader Способ загрузки
+     * @return Список загруженных грузовиков
+     */
     public List<Truck> fillTrucksWithBoxesByFileString(String file, String[] trucksSize, TruckLoader truckLoader) {
         List<Box> boxes = txtBoxService.getAllString(file);
         return fillTrucks(trucksSize, truckLoader, boxes);
     }
 
-    public List<Truck> fillTrucksWithBoxesByName(String[] name, String[] trucksSize, TruckLoader truckLoader) {
-        List<Box> boxes = boxService.getByNames(name).stream().map(opt -> opt.orElseThrow(BoxNotFoundException::new)).collect(Collectors.toList());
-        return fillTrucks(trucksSize, truckLoader, boxes);
-    }
-    public List<Truck> fillTrucksWithBoxesByName(String name, String trucksSize, TruckLoader truckLoader) {
-        String[] nameList = name.split(REGEX_PLAIN);
-        List<Box> boxes = boxService.getByNames(nameList).stream().map(opt -> opt.orElseThrow(BoxNotFoundException::new)).collect(Collectors.toList());
-        return fillTrucks(trucksSize, truckLoader, boxes);
-    }
-
-
-    public List<Truck> fillTrucksWithBoxesByFile(String filePath, String trucksSize, TruckLoader truckLoader) {
-        List<Box> boxes = txtBoxService.getAll(filePath);
+    /**
+     * Загружает коробки из базы данных по имени в грузовики заданого размера и выбранным способом
+     *
+     * @param names       Файл строчкой
+     * @param trucksSize  Массив строк с размерами грузовиков
+     * @param truckLoader Способ загрузки
+     * @return Список загруженных грузовиков
+     */
+    public List<Truck> fillTrucksWithBoxesByName(String[] names, String[] trucksSize, TruckLoader truckLoader) {
+        List<Box> boxes = boxService.getByNames(names).stream().map(opt -> opt.orElseThrow(BoxNotFoundException::new)).collect(Collectors.toList());
         return fillTrucks(trucksSize, truckLoader, boxes);
     }
 
-    public List<Truck> fillTrucksWithBoxesByFile(MultipartFile file, String trucksSize, TruckLoader truckLoader) {
+    /**
+     * Загружает коробки из базы данных по имени в грузовики заданого размера и выбранным способом
+     *
+     * @param file        Файл multipart
+     * @param trucksSize  Массив строк с размерами грузовиков
+     * @param truckLoader Способ загрузки
+     * @return Список загруженных грузовиков
+     */
+    public List<Truck> fillTrucksWithBoxesByFile(MultipartFile file, String[] trucksSize, TruckLoader truckLoader) {
         List<Box> boxes = multiPartBoxService.getAll(file);
         return fillTrucks(trucksSize, truckLoader, boxes);
     }
-
-
-
 
     private List<Truck> fillTrucks(String[] trucksSize, TruckLoader truckLoader, List<Box> boxes) {
         List<Truck> trucks = createListTrucks(trucksSize);
@@ -80,15 +91,6 @@ public class FillTruckService {
         jsonTruckService.save(trucksLoaded);
         return trucksLoaded;
     }
-
-    private List<Truck> fillTrucks(String trucksSize, TruckLoader truckLoader, List<Box> boxes) {
-        String[] truckSizeList = trucksSize.split(REGEX_PLAIN);
-        List<Truck> trucks = createListTrucks(truckSizeList);
-        List<Truck> trucksLoaded = truckLoader.load(boxes, trucks);
-        jsonTruckService.save(trucksLoaded);
-        return trucksLoaded;
-    }
-
 
     private List<Truck> createListTrucks(String[] truckSize) {
         List<Truck> trucks = new ArrayList<>();

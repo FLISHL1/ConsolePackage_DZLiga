@@ -3,10 +3,10 @@ package ru.liga.mapper;
 import org.springframework.stereotype.Component;
 
 @Component
-public class TruckSizeBotMapper implements Mapper<String[], String> {
+public class TruckSizeMapper implements Mapper<String[], String> {
 
     @Override
     public String[] map(String data) {
-        return data.split(" ");
+        return data.split("[ ,]");
     }
 }

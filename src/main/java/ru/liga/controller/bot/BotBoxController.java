@@ -20,6 +20,11 @@ public class BotBoxController {
         this.boxMapper = boxMapper;
     }
 
+    /**
+     * Возвращает все коробки
+     *
+     * @return Строчка со всеми коробками
+     */
     public String getAll() {
         List<Box> boxes = boxService.getAll();
         StringBuilder response = new StringBuilder("Все коробки:\n");
@@ -29,6 +34,13 @@ public class BotBoxController {
         return response.toString();
     }
 
+    /**
+     * Возвращает строчку с коробкой по id
+     *
+     * @param boxDetails Строчка с id коробки
+     * @return Строчка с коробкой
+     * @throws UserInputException Ошибка ввода пользователем
+     */
     public String getByName(String boxDetails) {
         String[] details = mapDetails(boxDetails);
         if (details.length >= 1) {
@@ -38,6 +50,12 @@ public class BotBoxController {
         return "Коробка: " + box.getName() + "\nРазмер: " + box.getSpace();
     }
 
+    /**
+     * Сохраняет коробку
+     * @param boxDetails Строчка с данными коробки
+     * @return Информация о том что коробка добавленна
+     * @throws UserInputException Ошибка ввода пользователем
+     */
     public String save(String boxDetails) {
         String[] details = mapDetails(boxDetails);
         if (details.length < 2) {
@@ -55,7 +73,12 @@ public class BotBoxController {
         return boxDetails.split(";");
     }
 
-
+    /**
+     * Обновляет полностью коробку
+     * @param boxDetails вся информация по коробке
+     * @return Сообщение что коробка обновлена
+     * @throws UserInputException Ошибка ввода пользователем
+     */
     public String update(String boxDetails) {
         String[] details = mapDetails(boxDetails);
         if (details.length < 2) {
@@ -78,6 +101,12 @@ public class BotBoxController {
         return "Коробка обновлена: " + box.getName();
     }
 
+    /**
+     * Удаляет коробку
+     *
+     * @param name Имя коробки
+     * @return Сообщение что коробка удалена
+     */
     public String delete(String name) {
         boxService.remove(name);
         return "Коробка удалена: " + name;

@@ -16,8 +16,9 @@ public class StringBoxParser implements Parser<Box, String>{
 
 
     /**
+     * Парсит коробки из строчки
      *
-     * @param fileName Путь до файла txt в папке resources
+     * @param file Файл txt строчкой
      * @return Список корбок
      */
     public List<Box> parse(String file){

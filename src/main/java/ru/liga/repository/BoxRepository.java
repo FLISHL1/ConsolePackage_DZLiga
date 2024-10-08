@@ -13,7 +13,6 @@ import ru.liga.exception.IdentityNameBoxException;
 import ru.liga.mapper.BoxMapper;
 
 import java.sql.Types;
-import java.util.Arrays;
 import java.util.List;
 
 @Repository
@@ -103,6 +102,11 @@ public class BoxRepository {
         namedJdbcTemplate.update(sql, sqlParameterSource);
     }
 
+    /**
+     * Удаляет коробку по имени
+     *
+     * @param name Имя коробки
+     */
     public void removeByName(String name) {
         String sql = "DELETE FROM boxes WHERE name = :name";
         SqlParameterSource sqlParameterSource = new MapSqlParameterSource()

@@ -16,8 +16,9 @@ public class MultiPartFileBoxParser implements Parser<Box, MultipartFile>{
     }
 
     /**
+     * Парсит коробки из multipart
      *
-     * @param fileName Путь до файла txt в папке resources
+     * @param file Файл txt multipart
      * @return Список корбок
      */
     public List<Box> parse(MultipartFile file){

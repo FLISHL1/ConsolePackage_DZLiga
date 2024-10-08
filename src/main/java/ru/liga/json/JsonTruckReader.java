@@ -25,6 +25,7 @@ public class JsonTruckReader implements Reader<List<Truck>> {
     }
 
     /**
+     * Получает из файла json список грузовиков
      *
      * @param fileName Путь до файла Json в папке проекта resources
      * @return Список грузовиков
@@ -43,8 +44,9 @@ public class JsonTruckReader implements Reader<List<Truck>> {
         }
     }
     /**
+     * Получает из файла json список грузовиков
      *
-     * @param file файл json
+     * @param file multipart файл json
      * @return Список грузовиков
      * @throws ReadJsonException Ошибка чтения json
      */
@@ -63,8 +65,9 @@ public class JsonTruckReader implements Reader<List<Truck>> {
     }
 
     /**
+     * Получает из файла json список грузовиков
      *
-     * @param file файл json
+     * @param file файл строчкой json
      * @return Список грузовиков
      * @throws ReadJsonException Ошибка чтения json
      */

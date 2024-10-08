@@ -16,17 +16,31 @@ public class BotTruckLoaderFileCommand {
     private final TruckLoader uniformTruckLoader;
     private final Mapper<String[], String> truckSizeMap;
 
-    public BotTruckLoaderFileCommand(FillTruckService fillTruckService, TruckLoader maximalTruckLoader, TruckLoader uniformTruckLoader, @Qualifier("truckSizeBotMapper") Mapper<String[], String> truckSizeMap) {
+    public BotTruckLoaderFileCommand(FillTruckService fillTruckService, TruckLoader maximalTruckLoader, TruckLoader uniformTruckLoader, @Qualifier("truckSizeMapper") Mapper<String[], String> truckSizeMap) {
         this.fillTruckService = fillTruckService;
         this.maximalTruckLoader = maximalTruckLoader;
         this.uniformTruckLoader = uniformTruckLoader;
         this.truckSizeMap = truckSizeMap;
     }
 
+    /**
+     * Возвращает сообщение с максимально плотно погруженными грузовиками
+     *
+     * @param file        Файл строчкой с коробками
+     * @param trucksSizes Строчка с размерами грузовиков
+     * @return Сообщение с загруженными грузовиками
+     */
     public String maximalLoaderTruck(String file, String trucksSizes) {
         return fillTruckWithBoxes(file, truckSizeMap.map(trucksSizes), maximalTruckLoader);
     }
 
+    /**
+     * Возвращает сообщение с равномерно погруженными грузовиками
+     *
+     * @param file Файл строчкой с коробками
+     * @param trucksSizes Строчка с размерами грузовиков
+     * @return Сообщение с загруженными грузовиками
+     */
     public String uniformLoaderTruck(String file, String trucksSizes) {
         return fillTruckWithBoxes(file, truckSizeMap.map(trucksSizes), uniformTruckLoader);
     }

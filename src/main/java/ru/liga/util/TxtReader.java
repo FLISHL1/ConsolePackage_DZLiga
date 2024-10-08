@@ -33,6 +33,12 @@ public class TxtReader implements Reader<List<String>> {
         }
     }
 
+    /**
+     * Читает файл multipart
+     *
+     * @param file файл multipart
+     * @return Список строк
+     */
     @Override
     public List<String> read(MultipartFile file) {
         try {
@@ -46,6 +52,12 @@ public class TxtReader implements Reader<List<String>> {
         }
     }
 
+    /**
+     * Читает файл строчкой
+     *
+     * @param file файл строчкой
+     * @return Список строк
+     */
     @Override
     public List<String> readByString(String file) {
         return Arrays.stream(file.split("\n")).collect(Collectors.toList());

@@ -1,7 +1,5 @@
 package ru.liga.dto;
 
-import jakarta.validation.constraints.NotBlank;
-
 import java.util.List;
 
 public class BoxDtoRequest {

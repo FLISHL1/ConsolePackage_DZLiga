@@ -27,6 +27,13 @@ public class BoxMapper implements RowMapper<Box> {
         return new Box(rs.getInt("id"), rs.getString("name"), spaceList);
     }
 
+
+    /**
+     * Преобразует строчку в фигуру коробки
+     *
+     * @param spaceData Строчка которую можно преобразовать в двумерный массив
+     * @return Двумерный массив для фигуры коробки
+     */
     public List<List<String>> mapSpaceStringToList(String spaceData) {
         List<List<String>> spaceList = new ArrayList<>();
         for (String line : spaceData.split(" ")) {
@@ -35,6 +42,12 @@ public class BoxMapper implements RowMapper<Box> {
         return spaceList;
     }
 
+    /**
+     * Преобразует фигуру коробки в строчку
+     *
+     * @param space фигура короюки
+     * @return Строчка с фигурой коробки
+     */
     public String mapListSpaceToStringSpace(List<List<String>> space) {
         StringBuilder spaceString = new StringBuilder();
         for (int iterLine = 0; iterLine < space.size(); iterLine++) {

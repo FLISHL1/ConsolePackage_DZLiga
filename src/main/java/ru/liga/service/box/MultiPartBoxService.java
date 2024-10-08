@@ -18,8 +18,8 @@ public class MultiPartBoxService {
     /**
      * Получаем все коробки из файла
      *
-     * @param file Файл
-     * @return Список коробок из файла
+     * @param file Файл с коробками
+     * @return Список коробок
      */
     public List<Box> getAll(MultipartFile file) {
         return multipartFileParser.parse(file);

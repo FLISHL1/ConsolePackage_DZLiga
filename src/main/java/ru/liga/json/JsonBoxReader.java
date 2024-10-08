@@ -31,6 +31,7 @@ public class JsonBoxReader implements Reader<List<Box>> {
      * @return {@code List<Box>} - Список коробок
      * @throws ReadJsonException Ошибка в чтении файла json
      */
+    @Override
     public List<Box> read(String filePath){
         try {
             log.info("Start file read: {}", filePath);
@@ -44,6 +45,13 @@ public class JsonBoxReader implements Reader<List<Box>> {
         }
     }
 
+    /**
+     * Читает файл json, возвращая список коробок
+     *
+     * @param file multipart файл json
+     * @return {@code List<Box>} - Список коробок
+     * @throws ReadJsonException Ошибка в чтении файла json
+     */
     @Override
     public List<Box> read(MultipartFile file) {
         try {
@@ -58,6 +66,13 @@ public class JsonBoxReader implements Reader<List<Box>> {
         }
     }
 
+    /**
+     * Читает файл json, возвращая список коробок
+     *
+     * @param file Файл json в строчке
+     * @return {@code List<Box>} - Список коробок
+     * @throws ReadJsonException Ошибка в чтении файла json
+     */
     @Override
     public List<Box> readByString(String file) {
         try {

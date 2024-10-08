@@ -40,6 +40,7 @@ public class TruckRepository {
     }
 
     /**
+     * Читает грузовики из файла filePath
      *
      * @param filePath Файл откуда читать грузовики
      * @return Спиок грузовиков
@@ -48,13 +49,31 @@ public class TruckRepository {
         return jsonReader.read(filePath);
     }
 
+    /**
+     * Читает грузовики из файла указанного в properties
+     *
+     * @return Спиок грузовиков
+     */
     public List<Truck> read() {
         return jsonReader.read(filePath);
     }
+
+    /**
+     * Читает грузовики из файла
+     *
+     * @param multipartFile Файл json c грузовиками
+     * @return Список грузовиков
+     */
     public List<Truck> read(MultipartFile multipartFile) {
         return jsonReader.read(multipartFile);
     }
 
+    /**
+     * Читает грузовики из файла
+     *
+     * @param file Файл json строчкой
+     * @return Список грузовиков
+     */
     public List<Truck> readByString(String file) {
         return jsonReader.readByString(file);
     }

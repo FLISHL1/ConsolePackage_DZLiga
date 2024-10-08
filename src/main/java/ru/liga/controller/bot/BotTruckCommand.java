@@ -15,10 +15,13 @@ public class BotTruckCommand {
         this.truckService = truckService;
     }
 
-
-    public String checkCountBoxInTrucks(
-            String file
-    ) {
+    /**
+     * Возвращает разобранные грузовики
+     *
+     * @param file Файл в строчке с грузовиками
+     * @return Сообщение с разбором грузовиков
+     */
+    public String checkCountBoxInTrucks(String file) {
         Map<Truck, Map<Box, Integer>> countBoxInTrucks = truckService.calcCountBoxInTruckFromJsonString(file);
         StringBuilder stringBuilder = new StringBuilder("Ниже будет указанно сколько и каких посылок было в грузовиках");
         for (Truck truck : countBoxInTrucks.keySet()) {

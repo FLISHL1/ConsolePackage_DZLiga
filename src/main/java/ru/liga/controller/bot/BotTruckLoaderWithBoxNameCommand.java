@@ -21,7 +21,7 @@ public class BotTruckLoaderWithBoxNameCommand {
     private final Mapper<String[], String> mapBoxName;
     private final Mapper<String[], String> mapTruckSize;
 
-    public BotTruckLoaderWithBoxNameCommand(FillTruckService fillTruckService, TruckLoader maximalTruckLoader, TruckLoader uniformTruckLoader, @Qualifier("boxNameBotMapper") Mapper<String[], String> mapBoxName, @Qualifier("truckSizeBotMapper") Mapper<String[], String> mapTruckSize) {
+    public BotTruckLoaderWithBoxNameCommand(FillTruckService fillTruckService, TruckLoader maximalTruckLoader, TruckLoader uniformTruckLoader, @Qualifier("boxNameMapper") Mapper<String[], String> mapBoxName, @Qualifier("truckSizeMapper") Mapper<String[], String> mapTruckSize) {
         this.fillTruckService = fillTruckService;
         this.maximalTruckLoader = maximalTruckLoader;
         this.uniformTruckLoader = uniformTruckLoader;
@@ -29,10 +29,24 @@ public class BotTruckLoaderWithBoxNameCommand {
         this.mapTruckSize = mapTruckSize;
     }
 
+    /**
+     * Возвращает сообщение с максимально плотно погруженными грузовиками
+     *
+     * @param boxNames    Строчка с именами коробок
+     * @param trucksSizes Строчка с размерами грузовиков
+     * @return Сообщение с загруженными грузовиками
+     */
     public String maximalLoaderTruck(String boxNames, String trucksSizes) {
         return fillTruckWithBoxes(mapBoxName.map(boxNames), mapTruckSize.map(trucksSizes), maximalTruckLoader);
     }
 
+    /**
+     * Возвращает сообщение с эффективно погруженными грузовиками
+     *
+     * @param boxNames Строчка с именами коробок
+     * @param trucksSizes Строчка с размерами грузовиков
+     * @return Сообщение с загруженными грузовиками
+     */
     public String uniformLoaderTruck(String boxNames, String trucksSizes) {
         return fillTruckWithBoxes(mapBoxName.map(boxNames), mapTruckSize.map(trucksSizes), uniformTruckLoader);
     }
