@@ -1,4 +1,4 @@
-package ru.liga.controller;
+package ru.liga.controller.shell;
 
 import org.jline.terminal.Terminal;
 import org.springframework.shell.standard.ShellCommandGroup;
@@ -6,7 +6,7 @@ import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
 import ru.liga.entity.Truck;
-import ru.liga.service.FillTruckService;
+import ru.liga.service.truck.FillTruckService;
 import ru.liga.truckLoader.TruckLoader;
 
 import java.util.List;

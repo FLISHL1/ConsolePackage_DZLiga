@@ -46,6 +46,29 @@ public class JsonBoxReader implements Reader<List<Box>> {
 
     @Override
     public List<Box> read(MultipartFile file) {
-        return List.of();
+        try {
+            log.info("Start file read: {}", file.getOriginalFilename());
+            List<Box> boxes = objectMapper.readValue(new String(file.getBytes()),
+                    new TypeReference<List<Box>>() {});
+            log.info("End file read: {}", file.getOriginalFilename());
+            return boxes;
+        } catch (IOException e) {
+            log.error("Error with read file: {}, exception: {}", file.getOriginalFilename(), e.getMessage());
+            throw new ReadJsonException(e.getMessage());
+        }
+    }
+
+    @Override
+    public List<Box> readByString(String file) {
+        try {
+            log.info("Start file txt string read");
+            List<Box> boxes = objectMapper.readValue(file,
+                    new TypeReference<List<Box>>() {});
+            log.info("End file txt string read");
+            return boxes;
+        } catch (IOException e) {
+            log.error("Error with read string file txt,  exception: {}", e.getMessage());
+            throw new ReadJsonException(e.getMessage());
+        }
     }
 }

@@ -1,5 +1,8 @@
 server:
   port: 8080
+bot:
+  name: PackageTruckTelegramBot
+  token: 7724488014:AAFKUeQnyMG_kV1P_bBW8wlViwfVHMwknHs
 
 spring:
   shell:

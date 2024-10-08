@@ -1,10 +1,12 @@
-package ru.liga.service;
+package ru.liga.service.truck;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.liga.entity.Truck;
+import ru.liga.exception.ReadJsonException;
 import ru.liga.repository.TruckRepository;
 
+import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -40,12 +42,27 @@ public class JsonTruckService {
     }
 
     /**
+     * Читает грузовики из файла
+     * @param file Файл в строке грузовики
+     * @return Список грузовиков в файле
+     */
+    public List<Truck> getAllByString(String file) {
+        return truckRepository.readByString(file);
+    }
+
+
+    /**
      * Читает грузовики из строчки json
      * @param multipartJson
      * @return Список грузовиков в файле
      */
     public List<Truck> getAll(MultipartFile multipartJson) {
-        return truckRepository.read(multipartJson);
+        try {
+            String fileJson = new String(multipartJson.getBytes());
+            return truckRepository.read(fileJson);
+        } catch (IOException e) {
+            throw new ReadJsonException(e.getMessage());
+        }
     }
 
     /**

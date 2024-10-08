@@ -1,4 +1,4 @@
-package ru.liga.service;
+package ru.liga.service.truck;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.liga.entity.Box;
 import ru.liga.entity.Truck;
+import ru.liga.service.TrunkService;
 
 import java.util.*;
 
@@ -72,6 +73,17 @@ public class TruckService {
      */
     public Map<Truck, Map<Box, Integer>> calcCountBoxInTruckFromJson(String filePath) {
         List<Truck> trucks = jsonTruckService.getAll(filePath);
+        return countBoxInTrucks(trucks);
+    }
+
+    /**
+     * Считает во всех грузовиках количество коробок по типам формы
+     *
+     * @param file Файл json в строке
+     * @return Словарь с количеством каждого типа коробок
+     */
+    public Map<Truck, Map<Box, Integer>> calcCountBoxInTruckFromJsonString(String file) {
+        List<Truck> trucks = jsonTruckService.getAllByString(file);
         return countBoxInTrucks(trucks);
     }
 

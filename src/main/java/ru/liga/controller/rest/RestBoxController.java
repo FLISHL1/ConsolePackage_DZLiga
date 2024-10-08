@@ -1,4 +1,4 @@
-package ru.liga.controller;
+package ru.liga.controller.rest;
 
 import jakarta.validation.constraints.NotBlank;
 import org.springframework.http.ResponseEntity;
@@ -7,7 +7,7 @@ import ru.liga.dto.BoxDtoRequest;
 import ru.liga.entity.Box;
 import ru.liga.exception.BoxNotFoundException;
 import ru.liga.exception.UserInputException;
-import ru.liga.service.BoxService;
+import ru.liga.service.box.BoxService;
 
 import java.util.List;
 import java.util.Optional;

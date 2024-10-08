@@ -1,4 +1,4 @@
-package ru.liga.controller;
+package ru.liga.controller.shell;
 
 import org.jline.terminal.Terminal;
 import org.springframework.shell.standard.ShellComponent;

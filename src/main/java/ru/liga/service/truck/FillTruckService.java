@@ -1,4 +1,4 @@
-package ru.liga.service;
+package ru.liga.service.truck;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -6,6 +6,9 @@ import ru.liga.entity.Box;
 import ru.liga.entity.Truck;
 import ru.liga.entity.Trunk;
 import ru.liga.exception.BoxNotFoundException;
+import ru.liga.service.box.BoxService;
+import ru.liga.service.box.MultiPartBoxService;
+import ru.liga.service.box.TxtBoxService;
 import ru.liga.truckLoader.TruckLoader;
 
 import java.util.ArrayList;
@@ -39,6 +42,11 @@ public class FillTruckService {
      */
     public List<Truck> fillTrucksWithBoxesByFile(String filePath, String[] trucksSize, TruckLoader truckLoader) {
         List<Box> boxes = txtBoxService.getAll(filePath);
+        return fillTrucks(trucksSize, truckLoader, boxes);
+    }
+
+    public List<Truck> fillTrucksWithBoxesByFileString(String file, String[] trucksSize, TruckLoader truckLoader) {
+        List<Box> boxes = txtBoxService.getAllString(file);
         return fillTrucks(trucksSize, truckLoader, boxes);
     }
 

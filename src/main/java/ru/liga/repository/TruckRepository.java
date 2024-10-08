@@ -55,4 +55,7 @@ public class TruckRepository {
         return jsonReader.read(multipartFile);
     }
 
+    public List<Truck> readByString(String file) {
+        return jsonReader.readByString(file);
+    }
 }

@@ -1,18 +1,19 @@
-package ru.liga.service;
+package ru.liga.service.box;
 
 import org.springframework.stereotype.Service;
 import ru.liga.entity.Box;
 import ru.liga.util.Parser;
-import ru.liga.util.TxtBoxParser;
 
 import java.util.List;
 
 @Service
 public class TxtBoxService {
     private final Parser<Box, String> txtBoxParser;
+    private final Parser<Box, String> stringBoxParser;
 
-    public TxtBoxService(TxtBoxParser txtBoxParser) {
+    public TxtBoxService(Parser<Box, String> txtBoxParser, Parser<Box, String> stringBoxParser) {
         this.txtBoxParser = txtBoxParser;
+        this.stringBoxParser = stringBoxParser;
     }
 
     /**
@@ -23,5 +24,9 @@ public class TxtBoxService {
      */
     public List<Box> getAll(String fileName) {
         return txtBoxParser.parse(fileName);
+    }
+
+    public List<Box> getAllString(String file) {
+        return stringBoxParser.parse(file);
     }
 }

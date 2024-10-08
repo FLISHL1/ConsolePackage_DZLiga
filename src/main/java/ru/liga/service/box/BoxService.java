@@ -1,8 +1,7 @@
-package ru.liga.service;
+package ru.liga.service.box;
 
 import org.springframework.stereotype.Service;
 import ru.liga.entity.Box;
-import ru.liga.exception.BoxNotFoundException;
 import ru.liga.exception.IdentityNameBoxException;
 import ru.liga.repository.BoxRepository;
 

@@ -61,4 +61,23 @@ public class JsonTruckReader implements Reader<List<Truck>> {
             throw new ReadJsonException(e.getMessage());
         }
     }
+
+    /**
+     *
+     * @param file файл json
+     * @return Список грузовиков
+     * @throws ReadJsonException Ошибка чтения json
+     */
+    public List<Truck> readByString(String file){
+        try {
+            log.info("Start file string read json");
+            List<Truck> trucks = objectMapper.readValue(file,
+                    new TypeReference<List<Truck>>() {});
+            log.info("End file string read json");
+            return trucks;
+        } catch (IOException e) {
+            log.error("Error with string read file json, exception: {}", e.getMessage());
+            throw new ReadJsonException(e.getMessage());
+        }
+    }
 }

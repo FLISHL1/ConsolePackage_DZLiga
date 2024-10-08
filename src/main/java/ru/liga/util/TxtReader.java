@@ -45,4 +45,9 @@ public class TxtReader implements Reader<List<String>> {
             return Collections.emptyList();
         }
     }
+
+    @Override
+    public List<String> readByString(String file) {
+        return Arrays.stream(file.split("\n")).collect(Collectors.toList());
+    }
 }

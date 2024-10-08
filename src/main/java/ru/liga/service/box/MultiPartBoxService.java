@@ -1,10 +1,9 @@
-package ru.liga.service;
+package ru.liga.service.box;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.liga.entity.Box;
 import ru.liga.util.Parser;
-import ru.liga.util.TxtBoxParser;
 
 import java.util.List;
 

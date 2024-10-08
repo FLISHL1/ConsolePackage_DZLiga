@@ -6,10 +6,10 @@ import ru.liga.entity.Box;
 import java.util.List;
 
 @Component
-public class TxtBoxParser implements Parser<Box, String>{
+public class StringBoxParser implements Parser<Box, String>{
     private final Reader<List<String>> txtReader;
     private final BoxParser boxParser;
-    public TxtBoxParser(Reader<List<String>> txtReader, BoxParser boxParser) {
+    public StringBoxParser(Reader<List<String>> txtReader, BoxParser boxParser) {
         this.txtReader = txtReader;
         this.boxParser = boxParser;
     }
@@ -20,8 +20,8 @@ public class TxtBoxParser implements Parser<Box, String>{
      * @param fileName Путь до файла txt в папке resources
      * @return Список корбок
      */
-    public List<Box> parse(String fileName){
-        List<String> readingLines = txtReader.read(fileName);
+    public List<Box> parse(String file){
+        List<String> readingLines = txtReader.readByString(file);
         return boxParser.parse(readingLines);
 
     }

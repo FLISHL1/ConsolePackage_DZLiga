@@ -1,4 +1,4 @@
-package ru.liga.controller;
+package ru.liga.controller.rest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import ru.liga.entity.Box;
 import ru.liga.entity.Truck;
-import ru.liga.service.TruckService;
+import ru.liga.service.truck.TruckService;
 
 import java.util.Map;
 

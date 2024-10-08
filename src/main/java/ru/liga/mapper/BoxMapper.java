@@ -10,6 +10,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class BoxMapper implements RowMapper<Box> {
@@ -26,10 +27,10 @@ public class BoxMapper implements RowMapper<Box> {
         return new Box(rs.getInt("id"), rs.getString("name"), spaceList);
     }
 
-    private List<List<String>> mapSpaceStringToList(String spaceData) {
+    public List<List<String>> mapSpaceStringToList(String spaceData) {
         List<List<String>> spaceList = new ArrayList<>();
         for (String line : spaceData.split(" ")) {
-            spaceList.add(Arrays.stream(line.split(",")).toList());
+            spaceList.add(Arrays.stream(line.split(",")).collect(Collectors.toList()));
         }
         return spaceList;
     }

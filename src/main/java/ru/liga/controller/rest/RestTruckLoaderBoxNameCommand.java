@@ -1,13 +1,12 @@
-package ru.liga.controller;
+package ru.liga.controller.rest;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 import ru.liga.entity.Truck;
-import ru.liga.service.FillTruckService;
+import ru.liga.service.truck.FillTruckService;
 import ru.liga.truckLoader.TruckLoader;
 
 import java.util.List;

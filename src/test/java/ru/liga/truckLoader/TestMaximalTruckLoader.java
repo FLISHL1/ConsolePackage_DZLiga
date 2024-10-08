@@ -9,7 +9,7 @@ import ru.liga.entity.Box;
 import ru.liga.entity.Truck;
 import ru.liga.entity.Trunk;
 import ru.liga.exception.LoadingCapacityExceededException;
-import ru.liga.service.BoxService;
+import ru.liga.service.box.BoxService;
 import ru.liga.service.TrunkService;
 
 import java.util.ArrayList;

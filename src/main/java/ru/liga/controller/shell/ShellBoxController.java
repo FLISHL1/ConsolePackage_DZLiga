@@ -1,4 +1,4 @@
-package ru.liga.controller;
+package ru.liga.controller.shell;
 
 import org.jline.terminal.Terminal;
 import org.springframework.shell.standard.ShellCommandGroup;
@@ -7,7 +7,7 @@ import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
 import ru.liga.entity.Box;
 import ru.liga.exception.BoxNotFoundException;
-import ru.liga.service.BoxService;
+import ru.liga.service.box.BoxService;
 
 import java.util.List;
 import java.util.Optional;
