@@ -42,12 +42,12 @@ public class RestTruckLoaderBoxNameCommand {
         return ResponseEntity.ok(trucks);
     }
 
-    @PostMapping("/truck-loader-unfiform-box")
+    @PostMapping("/truck-loader-uniform-box")
     private ResponseEntity<List<Truck>> uniformLoaderTruckBoxNames(
             @RequestParam("boxNames") String boxNames,
             @RequestParam("truckSizes") String trucksSizes
     ) {
-        List<Truck> trucks = fillTruckService.fillTrucksWithBoxesByName(mapBoxName.map(boxNames), mapBoxName.map(boxNames), uniformTruckLoader);
+        List<Truck> trucks = fillTruckService.fillTrucksWithBoxesByName(mapBoxName.map(boxNames), mapTruckSize.map(trucksSizes), uniformTruckLoader);
         return ResponseEntity.ok(trucks);
     }
 

@@ -59,7 +59,7 @@ public class JsonTruckService {
     public List<Truck> getAll(MultipartFile multipartJson) {
         try {
             String fileJson = new String(multipartJson.getBytes());
-            return truckRepository.read(fileJson);
+            return truckRepository.readByString(fileJson);
         } catch (IOException e) {
             throw new ReadJsonException(e.getMessage());
         }

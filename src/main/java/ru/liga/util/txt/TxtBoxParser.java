@@ -1,12 +1,15 @@
-package ru.liga.util;
+package ru.liga.util.txt;
 
 import org.springframework.stereotype.Component;
 import ru.liga.entity.Box;
+import ru.liga.util.BoxParser;
+import ru.liga.util.Parser;
+import ru.liga.util.Reader;
 
 import java.util.List;
 
 @Component
-public class TxtBoxParser implements Parser<Box, String>{
+public class TxtBoxParser implements Parser<Box, String> {
     private final Reader<List<String>> txtReader;
     private final BoxParser boxParser;
     public TxtBoxParser(Reader<List<String>> txtReader, BoxParser boxParser) {

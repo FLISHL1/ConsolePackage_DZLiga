@@ -38,7 +38,7 @@ public class RestTruckLoaderFileCommand {
         return ResponseEntity.ok(trucks);
     }
 
-    @PostMapping("/truck-loader-unfiform-local-file")
+    @PostMapping("/truck-loader-uniform-local-file")
     private ResponseEntity<List<Truck>> uniformLoaderTruckLocal(
             @RequestParam("filePathBox") String filePath,
             @RequestParam("truckSizes") String trucksSizes
@@ -57,7 +57,7 @@ public class RestTruckLoaderFileCommand {
         return ResponseEntity.ok(trucks);
     }
 
-    @PostMapping("/truck-loader-unfiform-file")
+    @PostMapping("/truck-loader-uniform-file")
     private ResponseEntity<List<Truck>> uniformLoaderTruck(
             @RequestParam("boxes") MultipartFile file,
             @RequestParam("truckSizes") String trucksSizes

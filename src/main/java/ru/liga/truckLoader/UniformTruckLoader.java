@@ -6,9 +6,9 @@ import org.springframework.stereotype.Component;
 import ru.liga.entity.Box;
 import ru.liga.entity.Truck;
 import ru.liga.exception.LoadingCapacityExceededException;
+import ru.liga.service.TrunkService;
 import ru.liga.service.box.BoxService;
 import ru.liga.service.truck.TruckService;
-import ru.liga.service.TrunkService;
 
 import java.util.List;
 
@@ -41,29 +41,36 @@ public class UniformTruckLoader implements TruckLoader {
         log.info("Boxes sorted by size.");
         for (Box box : boxes) {
             log.info("Attempting to load box with dimensions (Width: {}, Height: {})", box.getWidth(), box.getHeight());
-            boolean isPlace = false;
-            trucks = truckService.sortTrucksByFreeVolume(trucks);
-            log.info("Trucks sorted by free volume.");
-
-            for (Truck truck : trucks) {
-                if (trunkService.addBoxInTrunkWithFindPlace(truck, box)) {
-                    log.info("Box successfully loaded into truck #{}", trucks.indexOf(truck) + 1);
-                    isPlace = true;
-                    break;
-                }
-            }
-            if (!isPlace) {
-                log.error("Failed to load box with dimensions (Width: {}, Height: {}).", box.getWidth(), box.getHeight());
-                throw new LoadingCapacityExceededException();
-            }
+            loadTruck(trucks, box);
         }
-
         log.info("Loading process completed. Number of trucks used: {}", trucks.size());
         log.debug("Truck: \n");
+        logLoadedTrucks(trucks);
+        return trucks;
+    }
+
+    private void logLoadedTrucks(List<Truck> trucks) {
         for (Truck truck: trucks){
             log.debug(truck.toString()+"\n");
         }
-        return trucks;
+    }
+
+    private void loadTruck(List<Truck> trucks, Box box) {
+        boolean isPlace = false;
+        trucks = truckService.sortTrucksByFreeVolume(trucks);
+        log.info("Trucks sorted by free volume.");
+
+        for (Truck truck : trucks) {
+            if (trunkService.addBoxInTrunkWithFindPlace(truck, box)) {
+                log.info("Box successfully loaded into truck #{}", trucks.indexOf(truck) + 1);
+                isPlace = true;
+                break;
+            }
+        }
+        if (!isPlace) {
+            log.error("Failed to load box with dimensions (Width: {}, Height: {}).", box.getWidth(), box.getHeight());
+            throw new LoadingCapacityExceededException();
+        }
     }
 
 

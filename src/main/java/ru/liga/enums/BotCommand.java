@@ -2,7 +2,7 @@ package ru.liga.enums;
 
 public enum BotCommand {
     BOX_GET_ALL("/box_all"),
-    BOX_GET_NAME("box_get"),
+    BOX_GET_NAME("/box_get"),
     BOX_SAVE("/box_add"),
     BOX_UPDATE("/box_update"),
     BOX_DELETE("/box_remove"),

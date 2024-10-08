@@ -1,9 +1,10 @@
-package ru.liga.util;
+package ru.liga.util.txt;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
+import ru.liga.util.Reader;
 
 import java.io.File;
 import java.nio.file.Files;

@@ -1,4 +1,4 @@
-package ru.liga.json;
+package ru.liga.util.json;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;

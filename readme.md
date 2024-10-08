@@ -99,11 +99,11 @@
     - Для указания локального файла на сервере нужно использовать filePath=
         - Есть две команды для двух алгоритмов погрущки:
             - **Равномерная погрузка**.
-                - POST `/api/v1/trucks/actions/truck-loader-uniform-box?filePath=test.txt&truckSizes=1x1 2x2 3x4`
-                  - POST `/api/v1/trucks/actions/truck-loader-uniform-box?truckSizes=1x1 2x2 3x4` передавай файл multipart
+                - POST `/api/v1/trucks/actions/truck-loader-uniform-local-file?filePathBox=test.txt&truckSizes=1x1 2x2 3x4 6x6 6x6`
+                  - POST `/api/v1/trucks/actions/truck-loader-uniform-file?truckSizes=1x1 2x2 3x4 6x6 6x6` передавай файл multipart
               - **Максимальная погрузка**.
-                - POST `/api/v1/trucks/actions/truck-loader-maximal-box?filePath=test.txt&truckSizes=1x1 2x2 3x4`
-                - POST `/api/v1/trucks/actions/truck-loader-maximal-box?truckSizes=1x1 2x2 3x4` передавай файл multipart
+                - POST `/api/v1/trucks/actions/truck-loader-maximal-local-file?filePathBox=test.txt&truckSizes=1x1 2x2 3x4 6x6 6x6`
+                - POST `/api/v1/trucks/actions/truck-loader-maximal-file?truckSizes=1x1 2x2 3x4 6x6 6x6` передавай файл multipart
 
 2. **Погрузка грузовиков посылками из сохраненных типов**:
     - Для указания имен коробок нужно в параметрах запроса использовать boxNames=
@@ -114,16 +114,16 @@
      а ```height``` высота грузовик
         - Есть две команды для двух алгоритмов погрущки:
             - **Равномерная погрузка**.
-                - POST `/api/v1/trucks/actions/truck-loader-uniform-box?boxName=test test test&truckSizes=1x1 2x2 3x4`
+                - POST `/api/v1/trucks/actions/truck-loader-uniform-box?boxNames=Test Test Test&truckSizes=1x1 2x2 3x4 6x6`
             - **Максимальная погрузка**.
-                - POST `/api/v1/trucks/actions/truck-loader-maximal-box?boxName=test test test&truckSizes=1x1 2x2 3x4`
+                - POST `/api/v1/trucks/actions/truck-loader-uniform-box?boxNames=Test Test Test&truckSizes=1x1 2x2 3x4 6x6`
 
 3. **Определение количества посылок в загруженных грузовиках из файла .json**:
      - Для указания пути до файла нужно указать в пути filePath=
      - Или нужно отправить запрос multipartfile c названием trucks
 
     - Запрос POST `/api/v1/trucks/actions/count-box-in-trucks`
-    - Или с локальным файлом на сервере `/api/v1/trucks/actions/count-box-in-trucks-local-file`
+    - Или с локальным файлом на сервере `/api/v1/trucks/actions/count-box-in-trucks-local-file?filePath=truckTest.json`
 
 4. **Работа с типа посылок**
     - Пользователь вводит команду в консоль для вызова функции

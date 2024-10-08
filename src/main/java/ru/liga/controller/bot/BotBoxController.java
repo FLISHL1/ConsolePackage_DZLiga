@@ -1,5 +1,7 @@
 package ru.liga.controller.bot;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import ru.liga.entity.Box;
 import ru.liga.exception.BoxNotFoundException;
@@ -7,11 +9,13 @@ import ru.liga.exception.UserInputException;
 import ru.liga.mapper.BoxMapper;
 import ru.liga.service.box.BoxService;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Controller
 public class BotBoxController {
 
+    private static final Logger log = LoggerFactory.getLogger(BotBoxController.class);
     private final BoxService boxService;
     private final BoxMapper boxMapper;
 
@@ -43,9 +47,10 @@ public class BotBoxController {
      */
     public String getByName(String boxDetails) {
         String[] details = mapDetails(boxDetails);
-        if (details.length >= 1) {
+        if (details.length > 1) {
             throw new UserInputException();
         }
+        log.debug("{}", Arrays.toString(details));
         Box box = boxService.getByName(details[0]).orElseThrow(BoxNotFoundException::new);
         return "Коробка: " + box.getName() + "\nРазмер: " + box.getSpace();
     }

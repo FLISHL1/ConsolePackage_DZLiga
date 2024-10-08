@@ -1,5 +1,7 @@
 package ru.liga.bot;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
@@ -23,6 +25,7 @@ import java.io.InputStream;
 
 @Controller
 public class TelegramBot extends TelegramLongPollingBot {
+    private static final Logger log = LoggerFactory.getLogger(TelegramBot.class);
     private final BotBoxController botBoxController;
     private final BotTruckCommand botTruckCommand;
     private final BotTruckLoaderFileCommand botTruckLoaderFileCommand;
@@ -66,6 +69,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                 }
             } catch (UserInputException e) {
                 sendMessage(update.getMessage().getChatId(), "Произошла ошибка, проверьте /help");
+                log.debug("{}", e.getMessage());
             }
         }
 

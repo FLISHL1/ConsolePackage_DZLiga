@@ -1,1 +1,325 @@
-[{"trunk":{"HEIGHT":6,"WIDTH":6,"boxes":[{"name":"Коробка1","space":[["1","1","1","1","1"],["1","1","1","1","1"],["1","1","1","1","1"],["1","1","1","1","1"],["1","1","1","1","1"],["1","1","1","1","1"]],"id":3},{"name":"Коробка3","space":[["1"]],"id":5}],"space":[["1","1","1","1","1","1"],["1","1","1","1","1",null],["1","1","1","1","1",null],["1","1","1","1","1",null],["1","1","1","1","1",null],["1","1","1","1","1",null]]}},{"trunk":{"HEIGHT":12,"WIDTH":12,"boxes":[{"name":"Коробка2","space":[["1","1","1"],["1","1"],["1","1","1"],["1","1"],["1","1","1"]],"id":4},{"name":"Коробка4","space":[["1","1"],["1","1"]],"id":6}],"space":[["1","1","1","1","1",null,null,null,null,null,null,null],["1","1",null,"1","1",null,null,null,null,null,null,null],["1","1","1",null,null,null,null,null,null,null,null,null],["1","1",null,null,null,null,null,null,null,null,null,null],["1","1","1",null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null]]}}]
+[
+  {
+    "trunk": {
+      "HEIGHT": 6,
+      "WIDTH": 6,
+      "boxes": [
+        {
+          "name": "Box8",
+          "space": [
+            [
+              "9",
+              "9",
+              "9"
+            ],
+            [
+              "9",
+              "9",
+              "9"
+            ],
+            [
+              "9",
+              "9",
+              "9"
+            ]
+          ],
+          "id": 0
+        },
+        {
+          "name": "Box5",
+          "space": [
+            [
+              "6",
+              "6",
+              "6"
+            ],
+            [
+              "6",
+              "6",
+              "6"
+            ]
+          ],
+          "id": 0
+        },
+        {
+          "name": "Box4",
+          "space": [
+            [
+              "5",
+              "5",
+              "5",
+              "5",
+              "5"
+            ]
+          ],
+          "id": 0
+        },
+        {
+          "name": "Box3",
+          "space": [
+            [
+              "4",
+              "4",
+              "4",
+              "4"
+            ]
+          ],
+          "id": 0
+        },
+        {
+          "name": "Box2",
+          "space": [
+            [
+              "3",
+              "3",
+              "3"
+            ]
+          ],
+          "id": 0
+        },
+        {
+          "name": "Box1",
+          "space": [
+            [
+              "2",
+              "2"
+            ]
+          ],
+          "id": 0
+        },
+        {
+          "name": "Box0",
+          "space": [
+            [
+              "1"
+            ]
+          ],
+          "id": 0
+        }
+      ],
+      "space": [
+        [
+          "9",
+          "9",
+          "9",
+          "6",
+          "6",
+          "6"
+        ],
+        [
+          "9",
+          "9",
+          "9",
+          "6",
+          "6",
+          "6"
+        ],
+        [
+          "9",
+          "9",
+          "9",
+          "3",
+          "3",
+          "3"
+        ],
+        [
+          "5",
+          "5",
+          "5",
+          "5",
+          "5",
+          "1"
+        ],
+        [
+          "4",
+          "4",
+          "4",
+          "4",
+          "2",
+          "2"
+        ],
+        [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ]
+      ]
+    }
+  },
+  {
+    "trunk": {
+      "HEIGHT": 6,
+      "WIDTH": 6,
+      "boxes": [
+        {
+          "name": "Box6",
+          "space": [
+            [
+              "7",
+              "7",
+              "7"
+            ],
+            [
+              "7",
+              "7",
+              "7",
+              "7"
+            ]
+          ],
+          "id": 0
+        }
+      ],
+      "space": [
+        [
+          "7",
+          "7",
+          "7",
+          null,
+          null,
+          null
+        ],
+        [
+          "7",
+          "7",
+          "7",
+          "7",
+          null,
+          null
+        ],
+        [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ]
+      ]
+    }
+  },
+  {
+    "trunk": {
+      "HEIGHT": 5,
+      "WIDTH": 12,
+      "boxes": [
+        {
+          "name": "Box7",
+          "space": [
+            [
+              "8",
+              "8",
+              "8",
+              "8"
+            ],
+            [
+              "8",
+              "8",
+              "8",
+              "8"
+            ]
+          ],
+          "id": 0
+        }
+      ],
+      "space": [
+        [
+          "8",
+          "8",
+          "8",
+          "8",
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        [
+          "8",
+          "8",
+          "8",
+          "8",
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ]
+      ]
+    }
+  }
+]
