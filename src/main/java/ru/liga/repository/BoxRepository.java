@@ -55,7 +55,19 @@ public class BoxRepository {
         }
         return boxes.get(0);
     }
+    public @Nullable Box findById(Integer id) {
 
+        String sql = "SELECT * FROM public.boxes WHERE id = :id";
+        SqlParameterSource namedParameter = new MapSqlParameterSource()
+                .addValue("id", id);
+        List<Box> boxes = namedJdbcTemplate.query(sql, namedParameter, boxMapper);
+        if (boxes.size() > 1) {
+            throw new IdentityNameBoxException();
+        } else if (boxes.isEmpty()) {
+            return null;
+        }
+        return boxes.get(0);
+    }
     /**
      * Сохраняет тип коробки
      * @param box Коробка для сохранения
@@ -76,8 +88,9 @@ public class BoxRepository {
     /**
      * Обновление коробки полностью
      * @param box Коробка для обновления
+     * @return Обновленная коробка
      */
-    public void update(Box box) {
+    public Box update(Box box) {
         log.debug("{}", box);
         String sql = "UPDATE boxes SET name = :name, width = :width, height = :height, space = :space WHERE id = :id;";
         SqlParameterSource parameterSource = new MapSqlParameterSource()
@@ -87,7 +100,7 @@ public class BoxRepository {
                 .addValue("height", box.getHeight(), Types.INTEGER)
                 .addValue("space", boxMapper.mapListSpaceToStringSpace(box.getSpace()), Types.VARCHAR);
         log.debug("{}", namedJdbcTemplate.update(sql, parameterSource));
-
+        return box;
 
     }
 

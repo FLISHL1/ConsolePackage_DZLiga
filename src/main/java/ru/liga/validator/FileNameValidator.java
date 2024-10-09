@@ -2,11 +2,14 @@ package ru.liga.validator;
 
 import org.springframework.stereotype.Component;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 @Component
 public class FileNameValidator{
-    private final String REGEX_FILENAME_TXT = "(?!.*/\\.txt$).+\\.txt";
-    private final String REGEX_FILENAME_JSON = "(?!.*/\\.json$).+\\.json";
-    private final String ERROR_MESSAGE = "Incorrect file name";
+    private final static Pattern REGEX_FILENAME_TXT = Pattern.compile("(?!.*/\\.txt$).+\\.txt");
+    private final static Pattern REGEX_FILENAME_JSON = Pattern.compile("(?!.*/\\.json$).+\\.json");
+    private final static String ERROR_MESSAGE = "Incorrect file name";
 
     /**
      *
@@ -14,7 +17,7 @@ public class FileNameValidator{
      * @return Результат валидации
      */
     public ValidationResult validateTxt(String fileName){
-        if (fileName.matches(REGEX_FILENAME_TXT)){
+        if (REGEX_FILENAME_TXT.matcher(fileName).matches()){
             return new ValidationResult(true, "");
         } else {
             return new ValidationResult(false, ERROR_MESSAGE);
@@ -26,7 +29,7 @@ public class FileNameValidator{
      * @return Результат валидации
      */
     public ValidationResult validateJson(String fileName){
-        if (fileName.matches(REGEX_FILENAME_JSON)){
+        if (REGEX_FILENAME_JSON.matcher(fileName).matches()){
             return new ValidationResult(true, "");
         } else {
             return new ValidationResult(false, ERROR_MESSAGE);

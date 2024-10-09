@@ -33,6 +33,10 @@ public class Box {
         setSpace(space);
     }
 
+    public Box() {
+
+    }
+
     public String getName() {
         return name;
     }
@@ -58,7 +62,16 @@ public class Box {
                 .size();
         volume = height * width;
     }
-
+    /**
+     * Сменяет знак пространства коробки
+     *
+     * @param charSpace Новый символ заполнения коробки
+     */
+    public void changeCharSpace(String charSpace) {
+        for (List<String> line : space) {
+            line.replaceAll(ignored -> charSpace);
+        }
+    }
     public int getVolume() {
         return volume;
     }

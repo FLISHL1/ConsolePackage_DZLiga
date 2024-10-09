@@ -13,9 +13,9 @@ import org.telegram.telegrambots.meta.api.objects.File;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ru.liga.controller.bot.BotBoxController;
-import ru.liga.controller.bot.BotTruckCommand;
-import ru.liga.controller.bot.BotTruckLoaderFileCommand;
-import ru.liga.controller.bot.BotTruckLoaderWithBoxNameCommand;
+import ru.liga.controller.bot.BotTruckController;
+import ru.liga.controller.bot.BotTruckLoaderFileController;
+import ru.liga.controller.bot.BotTruckLoaderWithBoxNameController;
 import ru.liga.enums.BotCommand;
 import ru.liga.exception.FileDownloadException;
 import ru.liga.exception.UserInputException;
@@ -27,19 +27,19 @@ import java.io.InputStream;
 public class TelegramBot extends TelegramLongPollingBot {
     private static final Logger log = LoggerFactory.getLogger(TelegramBot.class);
     private final BotBoxController botBoxController;
-    private final BotTruckCommand botTruckCommand;
-    private final BotTruckLoaderFileCommand botTruckLoaderFileCommand;
-    private final BotTruckLoaderWithBoxNameCommand botTruckLoaderBoxNameCommand;
+    private final BotTruckController botTruckController;
+    private final BotTruckLoaderFileController botTruckLoaderFileController;
+    private final BotTruckLoaderWithBoxNameController botTruckLoaderBoxNameCommand;
     private final String botUsername;
     private final String botToken;
 
-    public TelegramBot(@Value("${bot.token}") String token, @Value("${bot.name}") String botName, TelegramBotsApi telegramBotsApi, BotBoxController botBoxController, BotTruckCommand botTruckCommand, BotTruckLoaderFileCommand botTruckLoaderFileCommand, BotTruckLoaderWithBoxNameCommand botTruckLoaderBoxNameCommand) throws TelegramApiException {
+    public TelegramBot(@Value("${bot.token}") String token, @Value("${bot.name}") String botName, TelegramBotsApi telegramBotsApi, BotBoxController botBoxController, BotTruckController botTruckController, BotTruckLoaderFileController botTruckLoaderFileController, BotTruckLoaderWithBoxNameController botTruckLoaderBoxNameCommand) throws TelegramApiException {
         super(token);
         this.botToken = token;
         this.botUsername = botName;
         this.botBoxController = botBoxController;
-        this.botTruckCommand = botTruckCommand;
-        this.botTruckLoaderFileCommand = botTruckLoaderFileCommand;
+        this.botTruckController = botTruckController;
+        this.botTruckLoaderFileController = botTruckLoaderFileController;
         this.botTruckLoaderBoxNameCommand = botTruckLoaderBoxNameCommand;
         telegramBotsApi.registerBot(this);
     }
@@ -93,11 +93,11 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     private void handleFileMessage(Long chatId, String file, String messageText) {
         if (checkCommand(BotCommand.COUNT_BOX_TRUCK, messageText)) {
-            sendMessage(chatId, botTruckCommand.checkCountBoxInTrucks(file));
+            sendMessage(chatId, botTruckController.checkCountBoxInTrucks(file));
         } else if (checkCommand(BotCommand.LOAD_TRUCK_MAXIMAL_FILE, messageText)) {
-            sendMessage(chatId, botTruckLoaderFileCommand.maximalLoaderTruck(file, removeCommand(BotCommand.LOAD_TRUCK_MAXIMAL_FILE, messageText)));
+            sendMessage(chatId, botTruckLoaderFileController.maximalLoaderTruck(file, removeCommand(BotCommand.LOAD_TRUCK_MAXIMAL_FILE, messageText)));
         } else if (checkCommand(BotCommand.LOAD_TRUCK_UNIFORM_FILE, messageText)) {
-            sendMessage(chatId, botTruckLoaderFileCommand.uniformLoaderTruck(file, removeCommand(BotCommand.LOAD_TRUCK_UNIFORM_FILE, messageText)));
+            sendMessage(chatId, botTruckLoaderFileController.uniformLoaderTruck(file, removeCommand(BotCommand.LOAD_TRUCK_UNIFORM_FILE, messageText)));
         }
     }
 

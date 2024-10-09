@@ -16,18 +16,17 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/trucks/actions")
-public class RestTruckCommand {
-    private static final Logger log = LoggerFactory.getLogger(RestTruckCommand.class);
+public class RestTruckController {
+    private static final Logger log = LoggerFactory.getLogger(RestTruckController.class);
     private final TruckService truckService;
 
-    public RestTruckCommand(TruckService truckService) {
+    public RestTruckController(TruckService truckService) {
         this.truckService = truckService;
     }
 
 
     @PostMapping("/count-box-in-trucks")
     private ResponseEntity<Map<Truck, Map<Box, Integer>>> checkCountBoxInTrucks(@RequestParam("trucks") MultipartFile multipartFile) {
-        log.debug("{}", multipartFile);
         Map<Truck, Map<Box, Integer>> countBoxInTrucks = truckService.calcCountBoxInTruckFromJson(multipartFile);
         return ResponseEntity.ok(countBoxInTrucks);
     }

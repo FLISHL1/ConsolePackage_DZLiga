@@ -1,16 +1,14 @@
 package ru.liga.controller.rest;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.liga.dto.BoxDtoRequest;
-import ru.liga.entity.Box;
-import ru.liga.exception.BoxNotFoundException;
-import ru.liga.exception.UserInputException;
+import ru.liga.dto.BoxDtoResponse;
 import ru.liga.service.box.BoxService;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/boxes")
@@ -22,62 +20,37 @@ public class RestBoxController {
     }
 
     @GetMapping()
-    private ResponseEntity<List<Box>> getAll() {
-        List<Box> boxes = boxService.getAll();
+    private ResponseEntity<List<BoxDtoResponse>> getAll() {
+        List<BoxDtoResponse> boxes = boxService.getAll();
         return ResponseEntity.ok(boxes);
     }
 
     @GetMapping("/{name}")
-    private ResponseEntity<Box> getByName(@PathVariable("name") @NotBlank String name) {
-        Box box = boxService.getByName(name).orElseThrow(BoxNotFoundException::new);
+    private ResponseEntity<BoxDtoResponse> getByName(@PathVariable("name") @NotBlank String name) {
+        BoxDtoResponse box = boxService.getByName(name);
         return ResponseEntity.ok(box);
     }
 
     @PostMapping
-    private ResponseEntity<Box> save(@RequestBody BoxDtoRequest boxDto) {
-        Box box = new Box(boxDto.getName(), boxDto.getSpace());
-        box = boxService.save(box);
+    private ResponseEntity<BoxDtoResponse> save(@RequestBody BoxDtoRequest boxDto) {
+        BoxDtoResponse box = boxService.save(boxDto);
         return ResponseEntity.ok(box);
     }
 
-    @PutMapping("/{name}")
-    private ResponseEntity update(
-            @PathVariable("name") @NotBlank String name,
-            @RequestBody BoxDtoRequest boxDtoRequest
-    ) {
-        Optional<String> newNameOpt = Optional.ofNullable(boxDtoRequest.getName());
-        Optional<List<List<String>>> spaceOpt = Optional.ofNullable(boxDtoRequest.getSpace());
-        Optional<String> charSpaceOpt = Optional.ofNullable(boxDtoRequest.getCharSpace());
-
-        Box box = boxService.getByName(name).orElseThrow(BoxNotFoundException::new);
-        spaceOpt.ifPresentOrElse(box::setSpace, UserInputException::new);
-        charSpaceOpt.ifPresentOrElse((ch) -> boxService.changeCharSpace(box, ch), UserInputException::new);
-        newNameOpt.ifPresentOrElse(box::setName, UserInputException::new);
-        boxService.update(box);
-        return ResponseEntity.ok().build();
+    @PutMapping("/{id}")
+    private ResponseEntity<?> update(@PathVariable("id") Integer id, @RequestBody @Valid BoxDtoRequest boxDtoRequest) {
+        BoxDtoResponse box = boxService.update(id, boxDtoRequest);
+        return ResponseEntity.ok(box);
     }
 
-    @PatchMapping("/{name}")
-    private ResponseEntity updatePart(
-            @PathVariable("name") @NotBlank String name,
-            @RequestBody BoxDtoRequest boxDtoRequest
-    ) {
-        Optional<String> newNameOpt = Optional.ofNullable(boxDtoRequest.getName());
-        Optional<List<List<String>>> spaceOpt = Optional.ofNullable(boxDtoRequest.getSpace());
-        Optional<String> charSpaceOpt = Optional.ofNullable(boxDtoRequest.getCharSpace());
-
-        Box box = boxService.getByName(name).orElseThrow(BoxNotFoundException::new);
-        spaceOpt.ifPresent(box::setSpace);
-        charSpaceOpt.ifPresent((ch) -> boxService.changeCharSpace(box, ch));
-        newNameOpt.ifPresent(box::setName);
-        boxService.update(box);
-        return ResponseEntity.ok().build();
+    @PatchMapping("/{id}")
+    private ResponseEntity<?> updatePart(@PathVariable("id") Integer id, @RequestBody BoxDtoRequest boxDtoRequest) {
+        BoxDtoResponse box = boxService.updatePart(id, boxDtoRequest);
+        return ResponseEntity.ok(box);
     }
 
     @DeleteMapping("/{name}")
-    private ResponseEntity remove(
-            @PathVariable("name") @NotBlank String name
-    ) {
+    private ResponseEntity<?> remove(@PathVariable("name") @NotBlank String name) {
         boxService.remove(name);
         return ResponseEntity.ok().build();
     }

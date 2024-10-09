@@ -2,10 +2,10 @@ package ru.liga.controller.bot;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import ru.liga.entity.Truck;
-import ru.liga.mapper.Mapper;
+import ru.liga.mapper.BoxNameMapper;
+import ru.liga.mapper.TruckSizeMapper;
 import ru.liga.service.truck.FillTruckService;
 import ru.liga.truckLoader.TruckLoader;
 
@@ -13,20 +13,16 @@ import java.util.Arrays;
 import java.util.List;
 
 @Controller
-public class BotTruckLoaderWithBoxNameCommand {
-    private static final Logger log = LoggerFactory.getLogger(BotTruckLoaderWithBoxNameCommand.class);
+public class BotTruckLoaderWithBoxNameController {
+    private static final Logger log = LoggerFactory.getLogger(BotTruckLoaderWithBoxNameController.class);
     private final FillTruckService fillTruckService;
     private final TruckLoader maximalTruckLoader;
     private final TruckLoader uniformTruckLoader;
-    private final Mapper<String[], String> mapBoxName;
-    private final Mapper<String[], String> mapTruckSize;
 
-    public BotTruckLoaderWithBoxNameCommand(FillTruckService fillTruckService, TruckLoader maximalTruckLoader, TruckLoader uniformTruckLoader, @Qualifier("boxNameMapper") Mapper<String[], String> mapBoxName, @Qualifier("truckSizeMapper") Mapper<String[], String> mapTruckSize) {
+    public BotTruckLoaderWithBoxNameController(FillTruckService fillTruckService, TruckLoader maximalTruckLoader, TruckLoader uniformTruckLoader) {
         this.fillTruckService = fillTruckService;
         this.maximalTruckLoader = maximalTruckLoader;
         this.uniformTruckLoader = uniformTruckLoader;
-        this.mapBoxName = mapBoxName;
-        this.mapTruckSize = mapTruckSize;
     }
 
     /**
@@ -37,7 +33,7 @@ public class BotTruckLoaderWithBoxNameCommand {
      * @return Сообщение с загруженными грузовиками
      */
     public String maximalLoaderTruck(String boxNames, String trucksSizes) {
-        return fillTruckWithBoxes(mapBoxName.map(boxNames), mapTruckSize.map(trucksSizes), maximalTruckLoader);
+        return fillTruckWithBoxes(boxNames, trucksSizes, maximalTruckLoader);
     }
 
     /**
@@ -48,13 +44,13 @@ public class BotTruckLoaderWithBoxNameCommand {
      * @return Сообщение с загруженными грузовиками
      */
     public String uniformLoaderTruck(String boxNames, String trucksSizes) {
-        return fillTruckWithBoxes(mapBoxName.map(boxNames), mapTruckSize.map(trucksSizes), uniformTruckLoader);
+        return fillTruckWithBoxes(boxNames, trucksSizes, uniformTruckLoader);
     }
 
 
-    private String fillTruckWithBoxes(String[] boxNames, String[] truckSize, TruckLoader truckLoader) {
-        log.debug("{}", Arrays.stream(boxNames).toList());
-        log.debug("{}", Arrays.stream(truckSize).toList());
+    private String fillTruckWithBoxes(String boxNames, String truckSize, TruckLoader truckLoader) {
+        log.debug("{}", boxNames);
+        log.debug("{}", truckSize);
         List<Truck> trucks = fillTruckService.fillTrucksWithBoxesByName(boxNames, truckSize, truckLoader);
         StringBuilder stringBuilder = new StringBuilder("Погруженные грузовики: \n");
         for (Truck truck : trucks) {

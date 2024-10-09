@@ -3,6 +3,8 @@ package ru.liga.controller.bot;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
+import ru.liga.dto.BoxDtoRequest;
+import ru.liga.dto.BoxDtoResponse;
 import ru.liga.entity.Box;
 import ru.liga.exception.BoxNotFoundException;
 import ru.liga.exception.UserInputException;
@@ -30,9 +32,9 @@ public class BotBoxController {
      * @return Строчка со всеми коробками
      */
     public String getAll() {
-        List<Box> boxes = boxService.getAll();
+        List<BoxDtoResponse> boxes = boxService.getAll();
         StringBuilder response = new StringBuilder("Все коробки:\n");
-        for (Box box : boxes) {
+        for (BoxDtoResponse box : boxes) {
             response.append(box.getName()).append("\n").append(box).append("\n");
         }
         return response.toString();
@@ -51,7 +53,7 @@ public class BotBoxController {
             throw new UserInputException();
         }
         log.debug("{}", Arrays.toString(details));
-        Box box = boxService.getByName(details[0]).orElseThrow(BoxNotFoundException::new);
+        BoxDtoResponse box = boxService.getByName(details[0]);
         return "Коробка: " + box.getName() + "\nРазмер: " + box.getSpace();
     }
 
@@ -69,9 +71,9 @@ public class BotBoxController {
         String name = details[0].trim();
         String space = details[1].trim();
 
-        Box box = new Box(name, boxMapper.mapSpaceStringToList(space));
-        box = boxService.save(box);
-        return "Коробка добавлена: " + box.getName();
+        BoxDtoRequest box = new BoxDtoRequest(name, boxMapper.mapSpaceStringToList(space));
+        BoxDtoResponse boxDtoResponse = boxService.save(box);
+        return "Коробка добавлена: " + boxDtoResponse.getName();
     }
 
     private String[] mapDetails(String boxDetails) {
@@ -86,10 +88,6 @@ public class BotBoxController {
      */
     public String update(String boxDetails) {
         String[] details = mapDetails(boxDetails);
-        if (details.length < 2) {
-            throw new UserInputException();
-        }
-        System.out.println(List.of(details));
         if (details.length < 4) {
             throw new UserInputException();
         }
@@ -97,13 +95,9 @@ public class BotBoxController {
         String newName = details[1].trim();
         String space = details[2].trim();
         String charSpace = details[3].trim();
-
-        Box box = boxService.getByName(name).orElseThrow(BoxNotFoundException::new);
-        box.setSpace(boxMapper.mapSpaceStringToList(space));
-        box.setName(newName);
-        boxService.changeCharSpace(box, charSpace);
-        boxService.update(box);
-        return "Коробка обновлена: " + box.getName();
+        BoxDtoRequest boxDtoRequest = new BoxDtoRequest(newName, boxMapper.mapSpaceStringToList(space), charSpace);
+        BoxDtoResponse boxDtoResponse = boxService.update(name, boxDtoRequest);
+        return "Коробка обновлена: " + boxDtoResponse.getName();
     }
 
     /**

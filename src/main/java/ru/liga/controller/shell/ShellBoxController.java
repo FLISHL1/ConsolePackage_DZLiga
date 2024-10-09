@@ -5,6 +5,8 @@ import org.springframework.shell.standard.ShellCommandGroup;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
+import ru.liga.dto.BoxDtoRequest;
+import ru.liga.dto.BoxDtoResponse;
 import ru.liga.entity.Box;
 import ru.liga.exception.BoxNotFoundException;
 import ru.liga.service.box.BoxService;
@@ -25,8 +27,8 @@ public class ShellBoxController {
 
     @ShellMethod(value = "Выводит все сохраненные типы коробок", key = {"box-all"})
     private void boxes() {
-        List<Box> boxes = boxService.getAll();
-        for (Box box : boxes) {
+        List<BoxDtoResponse> boxes = boxService.getAll();
+        for (BoxDtoResponse box : boxes) {
             southBox(box);
         }
     }
@@ -36,7 +38,7 @@ public class ShellBoxController {
             @ShellOption(help = "Имя типа коробки", value = {"name", "-n"})
             String name
     ) {
-        southBox(boxService.getByName(name).orElseThrow(BoxNotFoundException::new));
+        southBox(boxService.getByName(name));
     }
 
     @ShellMethod(value = "Сохраняет тип коробки", key = {"box-add"})
@@ -51,9 +53,9 @@ public class ShellBoxController {
                     """, value = {"space", "-s"}, arity = Integer.MAX_VALUE - 1)
             List<List<String>> space
     ) {
-        Box box = new Box(name, space);
-        boxService.save(box);
-        southBox(box);
+        BoxDtoRequest boxDtoRequest = new BoxDtoRequest(name, space, null);
+        BoxDtoResponse boxDtoResponse = boxService.save(boxDtoRequest);
+        southBox(boxDtoResponse);
     }
 
     @ShellMethod(value = "Обновляет тип коробки", key = {"box-update"})
@@ -73,16 +75,10 @@ public class ShellBoxController {
                     value = {"charSpace", "-c"}, defaultValue = ShellOption.NULL)
             String charSpaceArg
     ) {
-        Optional<String> newNameOpt = Optional.ofNullable(newNameArg);
-        Optional<List<List<String>>> spaceOpt = Optional.ofNullable(spaceArg);
-        Optional<String> charSpaceOpt = Optional.ofNullable(charSpaceArg);
 
-        Box box = boxService.getByName(name).orElseThrow(BoxNotFoundException::new);
-        spaceOpt.ifPresent(box::setSpace);
-        charSpaceOpt.ifPresent((ch) -> boxService.changeCharSpace(box, ch));
-        newNameOpt.ifPresent(box::setName);
-        boxService.update(box);
-        southBox(box);
+        BoxDtoRequest boxDtoRequest = new BoxDtoRequest(newNameArg, spaceArg, charSpaceArg);
+        BoxDtoResponse boxDtoResponse = boxService.updatePart(name, boxDtoRequest);
+        southBox(boxDtoResponse);
     }
 
     @ShellMethod(value = "Удаляет тип коробки", key = {"box-remove"})
@@ -94,7 +90,7 @@ public class ShellBoxController {
         terminal.writer().printf("Коробка %s удалена\n", name);
     }
 
-    private void southBox(Box box) {
+    private void southBox(BoxDtoResponse box) {
         StringBuilder boxString = new StringBuilder();
         boxString.append("Имя: ").append(box.getName()).append("\n");
         boxString.append("Форма: \n").append(box);

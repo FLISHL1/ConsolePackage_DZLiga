@@ -19,10 +19,10 @@ spring:
     enabled: true
     default-schema: public
     locations: classpath:migration
-    driver-class-name: "org.postgresql.Driver"
-    password: postgres
-    user: postgres
-    url: jdbc:postgresql://localhost:5432/postgres
+    driver-class-name: ${spring.db.driver-class-name}
+    password: ${spring.db.password}
+    user: ${spring.db.username}
+    url: ${spring.db.url}
 
 
 logging:

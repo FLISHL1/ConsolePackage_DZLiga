@@ -8,10 +8,10 @@ import ru.liga.service.truck.TruckService;
 import java.util.Map;
 
 @Controller
-public class BotTruckCommand {
+public class BotTruckController {
     private final TruckService truckService;
 
-    public BotTruckCommand(TruckService truckService) {
+    public BotTruckController(TruckService truckService) {
         this.truckService = truckService;
     }
 
